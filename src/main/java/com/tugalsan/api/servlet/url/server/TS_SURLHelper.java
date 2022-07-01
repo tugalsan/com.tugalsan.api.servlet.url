@@ -17,6 +17,7 @@ import com.tugalsan.api.network.server.*;
 import com.tugalsan.api.servlet.url.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.time.client.*;
+import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 
@@ -104,7 +105,7 @@ public class TS_SURLHelper {
 
     //CONTENT--------------------------------------------------------------------------------------------
     public final TS_SURLHelper compileForFile(Path filePath) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             var mimeType = context.getMimeType(filePath.toString());
             setContentType(mimeType == null ? "application/octet-stream" : mimeType);
             rs.setCharacterEncoding("UTF-8");
@@ -114,10 +115,10 @@ public class TS_SURLHelper {
             var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
             rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
             return this;
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
+        }, e -> {
+            e.printStackTrace();
+            return TGS_UnSafe.catchMeIfUCanReturns(e);
+        });
     }
 
     public final TS_SURLHelper compileForHtml() {
@@ -175,17 +176,17 @@ public class TS_SURLHelper {
     private boolean compiledAsFile = false;
 
     private TS_SURLHelper setContentType(CharSequence mime) {
-        var mimeStr = mime.toString();
-        if (isCompiledAsPlain()) {
-            throw new RuntimeException(TS_SURLHelper.class.getSimpleName() + ".setContentType(mime).Already compiled as Plain");
-        }
-        if (isCompiledAsHtml()) {
-            throw new RuntimeException(TS_SURLHelper.class.getSimpleName() + ".setContentType(mime).Already compiled as Html");
-        }
-        if (isCompiledAsFile()) {
-            throw new RuntimeException(TS_SURLHelper.class.getSimpleName() + ".setContentType(mime).Already compiled as Mime");
-        }
-        try {
+        return TGS_UnSafe.compile(() -> {
+            var mimeStr = mime.toString();
+            if (isCompiledAsPlain()) {
+                TGS_UnSafe.catchMeIfUCan(d.className, "setContentType(CharSequence mime)", "Already compiled as Plain");
+            }
+            if (isCompiledAsHtml()) {
+                TGS_UnSafe.catchMeIfUCan(d.className, "setContentType(CharSequence mime)", "Already compiled as Html");
+            }
+            if (isCompiledAsFile()) {
+                TGS_UnSafe.catchMeIfUCan(d.className, "setContentType(CharSequence mime)", "Already compiled as File");
+            }
             if (mimeStr.startsWith("text/html")) {
                 compiledAsHtml = true;
             } else if (mimeStr.startsWith("text/plain")) {
@@ -196,13 +197,11 @@ public class TS_SURLHelper {
             rs.setContentType(mimeStr);
             d.ci("setContentType", "mime", mimeStr);
             return this;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     public TS_SURLHelper(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
-        try {
+        TGS_UnSafe.execute(() -> {
             this.hs = hs;
             this.rq = rq;
             this.rs = rs;
@@ -214,9 +213,7 @@ public class TS_SURLHelper {
             if (servletName == null || servletName.isEmpty()) {
                 servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
     public ServletContext context;
     public HttpServlet hs;
@@ -259,98 +256,75 @@ public class TS_SURLHelper {
 
     @Deprecated
     public Boolean getParameterBoolean(CharSequence paramName, boolean assure) {
-        RuntimeException e1 = null;
-        String paramValue = null;
-        try {
-            paramValue = getParameter(paramName, new String[]{"true", "false"});
-        } catch (Exception e) {
-            e1 = new RuntimeException(e);
-        }
-        if (paramValue == null) {
-            if (assure) {
-                throw e1;
-            } else {
+        return TGS_UnSafe.compile(() -> {
+            var paramValue = getParameter(paramName, new String[]{"true", "false"});
+            if (paramValue == null) {
                 return null;
             }
-        }
-        return Boolean.valueOf(paramValue);
+            return Boolean.valueOf(paramValue);
+        }, e -> {
+            if (assure) {
+                return TGS_UnSafe.catchMeIfUCanReturns(e);
+            }
+            return null;
+        });
     }
 
     @Deprecated
     public Integer getParameterInteger(CharSequence paramName, boolean assure) {
-        RuntimeException e1 = null;
-        String paramValue = null;
-        try {
-            paramValue = getParameter(paramName, assure);
-        } catch (Exception e) {
-            e1 = new RuntimeException(e);
-        }
-        if (paramValue == null) {
-            if (assure) {
-                throw e1;
-            } else {
+        return TGS_UnSafe.compile(() -> {
+            var paramValue = getParameter(paramName, assure);
+            if (paramValue == null) {
                 return null;
             }
-        }
-        return Integer.valueOf(paramValue);
+            return Integer.valueOf(paramValue);
+        }, e -> {
+            if (assure) {
+                return TGS_UnSafe.catchMeIfUCanReturns(e);
+            }
+            return null;
+        });
     }
 
     @Deprecated
     public Long getParameterLong(CharSequence paramName, boolean assure) {
-        RuntimeException e1 = null;
-        String paramValue = null;
-        try {
-            paramValue = getParameter(paramName, assure);
-        } catch (Exception e) {
-            e1 = new RuntimeException(e);
-        }
-        if (paramValue == null) {
-            if (assure) {
-                throw e1;
-            } else {
+        return TGS_UnSafe.compile(() -> {
+            var paramValue = getParameter(paramName, assure);
+            if (paramValue == null) {
                 return null;
             }
-        }
-        return Long.valueOf(paramValue);
+            return Long.valueOf(paramValue);
+        }, e -> {
+            if (assure) {
+                return TGS_UnSafe.catchMeIfUCanReturns(e);
+            }
+            return null;
+        });
     }
 
     @Deprecated
     public TGS_Time getParameterDate(CharSequence paramName, boolean assure) {
-        RuntimeException e1 = null;
-        Integer paramValue = null;
-        try {
-            paramValue = getParameterInteger(paramName, assure);
-        } catch (Exception e) {
-            e1 = new RuntimeException(e);
-        }
-        if (paramValue == null) {
-            if (assure) {
-                throw e1;
-            } else {
+        return TGS_UnSafe.compile(() -> {
+            var paramValue = getParameterLong(paramName, assure);
+            if (paramValue == null) {
                 return null;
             }
-        }
-        return new TGS_Time(paramValue);
+            return TGS_Time.of(paramValue, true);
+        }, e -> {
+            if (assure) {
+                return TGS_UnSafe.catchMeIfUCanReturns(e);
+            }
+            return null;
+        });
     }
 
     //ERROR-HANDLER---------------------------------------------------------------
     final public void throwError(String text) {
-        throwError(null, text);
+        TGS_UnSafe.catchMeIfUCan(d.className, "throwError", text);
     }
 
     final public void throwError(Throwable t) {
-        throwError(t, null);
-    }
-
-    final public void throwError(Throwable t, CharSequence text) {
-        if (t != null) {//fill error if empty
-            if (text == null) {
-                text = t.getMessage();
-            } else {
-                text = text + " - " + t.getMessage();
-            }
-        }
-        throw new RuntimeException(text.toString(), t);//throw error & exception
+        TGS_UnSafe.catchMeIfUCan(t);
     }
 
     //BASIC-PRINTER---------------------------------------------------------------
@@ -370,17 +344,17 @@ public class TS_SURLHelper {
     }
 
     private PrintWriter getPrintWriter() {
-        try {
+        return TGS_UnSafe.compile(() -> {
             var exists = printWriter.get();
             if (exists == null) {
                 printWriter.set(rs.getWriter());
                 exists = printWriter.get();
             }
             return exists;
-        } catch (Exception e) {
+        }, e -> {
             e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+            return TGS_UnSafe.catchMeIfUCanReturns(e);
+        });
     }
     private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
 
@@ -423,12 +397,12 @@ public class TS_SURLHelper {
     }
 
     public TS_SURLHelper transferPng(BufferedImage image) {
-        try ( var os = rs.getOutputStream()) {
-            ImageIO.write(image, "png", os);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return this;
+        return TGS_UnSafe.compile(() -> {
+            try ( var os = rs.getOutputStream()) {
+                ImageIO.write(image, "png", os);
+            }
+            return this;
+        });
     }
 
     //ERROR-MSG-HTML
