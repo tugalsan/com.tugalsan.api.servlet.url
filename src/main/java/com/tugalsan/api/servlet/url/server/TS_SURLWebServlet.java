@@ -6,6 +6,7 @@ import javax.servlet.http.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.servlet.url.client.*;
+import com.tugalsan.api.unsafe.client.*;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 public class TS_SURLWebServlet extends HttpServlet {
@@ -24,7 +25,7 @@ public class TS_SURLWebServlet extends HttpServlet {
 
     public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
         var shw = new TS_SURLHelper(servlet, rq, rs);
-        try {
+        TGS_UnSafe.execute(() -> {
             if (shw.servletName == null) {
                 shw.throwError("servletName is null");
             } else {
@@ -44,9 +45,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 si.value1.execute(shw);
             }
             shw.flushAndclose();
-        } catch (Exception e) {
-            shw.handleError(e);
-        }
+        }, e -> shw.handleError(e));
     }
     public static List<String> SKIP_ERRORS_FOR_SERVLETNAMES = TGS_ListUtils.of();
 }
