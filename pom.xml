@@ -7,8 +7,8 @@
   
     <dependencies>
         <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId><!--gwt-user ver2022.07.05 -->
+            <groupId>org.gwtproject</groupId>
+            <artifactId>gwt-user</artifactId><!-- gwt-user ver2022.07.05 -->
             <exclusions>
                 <exclusion>
                     <groupId>com.google.jsinterop</groupId>
