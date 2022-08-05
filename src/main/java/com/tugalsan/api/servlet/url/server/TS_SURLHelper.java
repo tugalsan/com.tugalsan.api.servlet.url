@@ -411,8 +411,8 @@ public class TS_SURLHelper {
         println(TGS_FileHtmlUtils.endLines(true));
     }
 
-    public void html_error_msg(CharSequence text, CharSequence browserTitle, CharSequence favIcon) {
-        println(TGS_FileHtmlUtils.beginLines(browserTitle, true, false, 5, 5, favIcon, true));
+    public void html_error_msg(CharSequence text, CharSequence browserTitle, CharSequence favIcon, CharSequence optionalCustomDomain) {
+        println(TGS_FileHtmlUtils.beginLines(browserTitle, true, false, 5, 5, favIcon, true, optionalCustomDomain));
         html_error_msg(text);
     }
 }
