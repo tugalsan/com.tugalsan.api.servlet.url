@@ -328,14 +328,14 @@ public class TS_SURLHelper {
     }
 
     //BASIC-PRINTER---------------------------------------------------------------
-    final public void flush() {
+    final public void flushAndContinue() {
         var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
         }
     }
 
-    final public void flushAndclose() {
+    final public void flushAndClose() {
         var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
@@ -393,7 +393,7 @@ public class TS_SURLHelper {
         if (isCompiledAsHtml()) {
             println("</b>");
         }
-        flushAndclose();
+        flushAndClose();
     }
 
     public TS_SURLHelper transferPng(BufferedImage image) {

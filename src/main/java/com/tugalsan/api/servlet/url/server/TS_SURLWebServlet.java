@@ -32,19 +32,19 @@ public class TS_SURLWebServlet extends HttpServlet {
                 var si = TS_SURLExecutorList.get(shw.servletName);
                 if (si == null) {
                     if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, shw.servletName)).findAny().isPresent()) {
-                        shw.flushAndclose();
+                        shw.flushAndClose();
                         return;
                     }
                     TS_SURLExecutorList.SYNC.forEach(item -> {
                         d.ce("call", "-", item.value0);
                     });
                     shw.throwError("servletName not identified: [" + shw.servletName + "]");
-                    shw.flushAndclose();
+                    shw.flushAndClose();
                     return;
                 }
                 si.value1.execute(shw);
             }
-            shw.flushAndclose();
+            shw.flushAndClose();
         }, e -> shw.handleError(e));
     }
     public static List<String> SKIP_ERRORS_FOR_SERVLETNAMES = TGS_ListUtils.of();
