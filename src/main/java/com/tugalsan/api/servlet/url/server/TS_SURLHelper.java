@@ -346,6 +346,7 @@ public class TS_SURLHelper {
         if (exists != null) {
             exists.flush();
             exists.close();
+            printWriterClosed.set(Boolean.TRUE);
         }
     }
 
