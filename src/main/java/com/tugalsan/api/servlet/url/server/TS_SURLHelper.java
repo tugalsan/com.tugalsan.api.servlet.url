@@ -329,6 +329,9 @@ public class TS_SURLHelper {
 
     //BASIC-PRINTER---------------------------------------------------------------
     final public void flushAndContinue() {
+        if (printWriterClosed.get()) {
+            return;
+        }
         var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
@@ -336,6 +339,9 @@ public class TS_SURLHelper {
     }
 
     final public void flushAndClose() {
+        if (printWriterClosed.get()) {
+            return;
+        }
         var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
@@ -357,6 +363,7 @@ public class TS_SURLHelper {
         });
     }
     private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
+    private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
 
     final public void print(CharSequence s) {
         getPrintWriter().write(s.toString());
