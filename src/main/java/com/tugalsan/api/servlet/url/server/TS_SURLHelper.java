@@ -367,6 +367,9 @@ public class TS_SURLHelper {
     private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
 
     final public void print(CharSequence s) {
+        if (printWriterClosed.get()) {
+            return;
+        }
         getPrintWriter().write(s.toString());
     }
 
