@@ -329,14 +329,14 @@ public class TS_SURLHelper {
 
     //BASIC-PRINTER---------------------------------------------------------------
     final public void flush() {
-        var exists = printWriter.get();
+        var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
         }
     }
 
     final public void flushAndclose() {
-        var exists = printWriter.get();
+        var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
             exists.close();
