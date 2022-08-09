@@ -339,7 +339,7 @@ public class TS_SURLHelper {
     }
 
     final public void flushAndClose() {
-        if (printWriterClosed.get()) {
+        if (printWriterClosed.get() || isCompiledAsFile()) {
             return;
         }
         var exists = getPrintWriter();
