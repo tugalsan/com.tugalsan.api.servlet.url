@@ -309,7 +309,7 @@ public class TS_SURLHelper {
             if (paramValue == null) {
                 return null;
             }
-            return TGS_Time.of(paramValue, true);
+            return TGS_Time.ofDate(paramValue);
         }, e -> {
             if (assure) {
                 return TGS_UnSafe.catchMeIfUCanReturns(e);
