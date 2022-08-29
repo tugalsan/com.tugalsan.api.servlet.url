@@ -23,7 +23,7 @@ import com.tugalsan.api.url.server.*;
 
 public class TS_SURLHelper {
 
-    final private static TS_Log d = TS_Log.of(TS_SURLHelper.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SURLHelper.class);
 
     public static boolean CONTENT_TYPE_PLAIN() {
         return true;

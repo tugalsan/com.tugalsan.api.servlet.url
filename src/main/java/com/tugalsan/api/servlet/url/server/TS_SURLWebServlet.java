@@ -11,7 +11,7 @@ import com.tugalsan.api.unsafe.client.*;
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 public class TS_SURLWebServlet extends HttpServlet {
 
-    final private static TS_Log d = TS_Log.of(TS_SURLWebServlet.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SURLWebServlet.class);
 
     @Override
     public void doGet(HttpServletRequest rq, HttpServletResponse rs) {
