@@ -320,11 +320,15 @@ public class TS_SURLHelper {
 
     //ERROR-HANDLER---------------------------------------------------------------
     final public void throwError(String text) {
-        TGS_UnSafe.catchMeIfUCan(d.className, "throwError", text);
+        TGS_UnSafe.catchMeIfUCan(d.className, "throwError(String text)", text);
     }
 
     final public void throwError(Throwable t) {
         TGS_UnSafe.catchMeIfUCan(t);
+    }
+
+    final public void throwError(CharSequence className, CharSequence funcName, Object errorContent) {
+        TGS_UnSafe.catchMeIfUCan(className, funcName, errorContent);
     }
 
     //BASIC-PRINTER---------------------------------------------------------------
@@ -363,8 +367,8 @@ public class TS_SURLHelper {
             return TGS_UnSafe.catchMeIfUCanReturns(e);
         });
     }
-    private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
-    private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
+    final private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
+    final private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
 
     final public void print(CharSequence s) {
         if (printWriterClosed.get()) {
