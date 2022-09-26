@@ -22,13 +22,13 @@ import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 
 public class TS_SURLHelper {
-
+    
     final private static TS_Log d = TS_Log.of(TS_SURLHelper.class);
-
+    
     public static boolean CONTENT_TYPE_PLAIN() {
         return true;
     }
-
+    
     public static boolean CONTENT_TYPE_HTML() {
         return false;
     }
@@ -38,39 +38,39 @@ public class TS_SURLHelper {
         println(t.getMessage());
         Arrays.stream(t.getStackTrace()).forEachOrdered(ste -> println(ste.toString()));
     }
-
+    
     public void addHTML_HeaderBR(CharSequence text) {
         println(TGS_StringUtils.concat("<h3>", text, "</h3><br/>"));
     }
-
+    
     public void addHTML_HeaderBR(TGS_FileHtmlText text) {
         println(TGS_StringUtils.concat("<h3>", text.toString(), "</h3><br/>"));
     }
-
+    
     public void addHTML_P(String text) {
         println(TGS_StringUtils.concat("<p>", text, "</p>"));
     }
-
+    
     public void addHTML_P(TGS_FileHtmlText text) {
         println(TGS_StringUtils.concat("<p>", text.toString(), "</p>"));
     }
-
+    
     public void addHTML_TextBR(List<String> texts) {
         texts.stream().forEachOrdered(s -> println(s + "<br/>"));
     }
-
+    
     public void addHTML_TextBR(CharSequence text) {
         println(text + "<br/>");
     }
-
+    
     public void addHTML_TextBR(TGS_FileHtmlText text) {
         println(text.toString() + "<br/>");
     }
-
+    
     public void addHTML_BR(int count) {
         IntStream.range(0, count).forEachOrdered(i -> println("<br/>"));
     }
-
+    
     public void addHTML_ImgBR(TGS_Url source, Integer width, Integer height) {
         println("<img src=\"" + source + "\""
                 + (width == null ? "" : TGS_StringUtils.concat(" width=\"", String.valueOf(width), "\""))
@@ -78,7 +78,7 @@ public class TS_SURLHelper {
                 + "/><br/>"
         );
     }
-
+    
     public void addHTML_Validator(CharSequence formName, CharSequence funcName,
             CharSequence[] varNames, CharSequence[] varLables, CharSequence errorNull, CharSequence errorMax, int maxChar) {
         println("<script>");
@@ -93,7 +93,7 @@ public class TS_SURLHelper {
         println("}");
         println("</script>");
     }
-
+    
     public void addHTML_LinkBR(CharSequence text, CharSequence url) {
         println(TGS_StringUtils.concat("<a href=\"", url, "\">", text, "</a><br/>"));
     }
@@ -120,61 +120,61 @@ public class TS_SURLHelper {
             return TGS_UnSafe.catchMeIfUCanReturns(e);
         });
     }
-
+    
     public final TS_SURLHelper compileForHtml() {
         setContentType("text/html; charset=" + StandardCharsets.UTF_8.name());
         rs.setCharacterEncoding("UTF-8");
         return this;
     }
-
+    
     public final TS_SURLHelper compileForCSS() {
         setContentType("text/css; charset=" + StandardCharsets.UTF_8.name());
         rs.setCharacterEncoding("UTF-8");
         return this;
     }
-
+    
     public final TS_SURLHelper compileForJS() {
         setContentType("text/javascript; charset=" + StandardCharsets.UTF_8.name());
         rs.setCharacterEncoding("UTF-8");
         return this;
     }
-
+    
     public final TS_SURLHelper compileForPng() {
         setContentType("image/png");
         rs.setCharacterEncoding("UTF-8");
         return this;
     }
-
+    
     public final TS_SURLHelper compileForPlain() {
         setContentType("text/plain; charset=" + StandardCharsets.UTF_8.name());
         rs.setCharacterEncoding("UTF-8");
         return this;
     }
-
+    
     public final TS_SURLHelper addHeaderNoCache() {
         rs.setHeader("Cache-Control", "private,no-cache,no-store");
         return this;
     }
-
+    
     public final boolean isCompiled() {
         return isCompiledAsPlain() || isCompiledAsHtml() || isCompiledAsFile();
     }
-
+    
     public final boolean isCompiledAsPlain() {
         return compiledAsPlain;
     }
     private boolean compiledAsPlain = false;
-
+    
     public final boolean isCompiledAsHtml() {
         return compiledAsHtml;
     }
     private boolean compiledAsHtml = false;
-
+    
     public final boolean isCompiledAsFile() {
         return compiledAsFile;
     }
     private boolean compiledAsFile = false;
-
+    
     private TS_SURLHelper setContentType(CharSequence mime) {
         return TGS_UnSafe.compile(() -> {
             var mimeStr = mime.toString();
@@ -193,13 +193,14 @@ public class TS_SURLHelper {
                 compiledAsPlain = true;
             } else {
                 compiledAsFile = true;
+                printWriterClosed.set(Boolean.TRUE);
             }
             rs.setContentType(mimeStr);
             d.ci("setContentType", "mime", mimeStr);
             return this;
         });
     }
-
+    
     public TS_SURLHelper(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
         TGS_UnSafe.execute(() -> {
             this.hs = hs;
@@ -225,7 +226,7 @@ public class TS_SURLHelper {
     public String getParameterFromUrlSafe64(CharSequence paramName) {
         return TGS_StringUtils.toNullIfEmpty(TGS_UrlQueryUtils.param64UrlSafe_2_readable(getParameter(paramName, false)));
     }
-
+    
     @Deprecated
     public String getParameter(CharSequence paramName, boolean assure) {
         var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
@@ -238,7 +239,7 @@ public class TS_SURLHelper {
 //        d.ce("getParameter", "url/param/result", url, paramName, paramValue);
         return paramValue;
     }
-
+    
     @Deprecated
     public String getParameter(CharSequence paramName, CharSequence[] assureChoices) {
         var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
@@ -253,7 +254,7 @@ public class TS_SURLHelper {
         throwError(TGS_StringUtils.concat("Parameter ", paramName, " is not in the list of assureChoices: ", Arrays.toString(assureChoices)));
         return null;
     }
-
+    
     @Deprecated
     public Boolean getParameterBoolean(CharSequence paramName, boolean assure) {
         return TGS_UnSafe.compile(() -> {
@@ -269,7 +270,7 @@ public class TS_SURLHelper {
             return null;
         });
     }
-
+    
     @Deprecated
     public Integer getParameterInteger(CharSequence paramName, boolean assure) {
         return TGS_UnSafe.compile(() -> {
@@ -285,7 +286,7 @@ public class TS_SURLHelper {
             return null;
         });
     }
-
+    
     @Deprecated
     public Long getParameterLong(CharSequence paramName, boolean assure) {
         return TGS_UnSafe.compile(() -> {
@@ -301,7 +302,7 @@ public class TS_SURLHelper {
             return null;
         });
     }
-
+    
     @Deprecated
     public TGS_Time getParameterDate(CharSequence paramName, boolean assure) {
         return TGS_UnSafe.compile(() -> {
@@ -322,11 +323,11 @@ public class TS_SURLHelper {
     final public void throwError(String text) {
         TGS_UnSafe.catchMeIfUCan(d.className, "throwError(String text)", text);
     }
-
+    
     final public void throwError(Throwable t) {
         TGS_UnSafe.catchMeIfUCan(t);
     }
-
+    
     final public void throwError(CharSequence className, CharSequence funcName, Object errorContent) {
         TGS_UnSafe.catchMeIfUCan(className, funcName, errorContent);
     }
@@ -341,7 +342,7 @@ public class TS_SURLHelper {
             exists.flush();
         }
     }
-
+    
     final public void flushAndClose() {
         if (printWriterClosed.get() || isCompiledAsFile()) {
             return;
@@ -353,9 +354,9 @@ public class TS_SURLHelper {
             printWriterClosed.set(Boolean.TRUE);
         }
     }
-
+    
     private PrintWriter getPrintWriter() {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.compileSafe(() -> {
             var exists = printWriter.get();
             if (exists == null) {
                 printWriter.set(rs.getWriter());
@@ -369,29 +370,30 @@ public class TS_SURLHelper {
     }
     final private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
     final private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
-
+    
     final public void print(CharSequence s) {
         if (printWriterClosed.get()) {
+            d.cr("print", "printWriter closed already!");
             return;
         }
         getPrintWriter().write(s.toString());
     }
-
+    
     final public void println() {
         print("\n");
     }
-
+    
     final public void println(CharSequence s) {
         print(s);
         println();
     }
-
+    
     public void println(Throwable t) {
         print("ERROR: ");
         println(t.getMessage());
         Arrays.stream(t.getStackTrace()).forEachOrdered(ste -> println(ste.toString()));
     }
-
+    
     public void println(List<String> al) {
         al.stream().forEachOrdered(s -> println(s));
     }
@@ -410,7 +412,7 @@ public class TS_SURLHelper {
         }
         flushAndClose();
     }
-
+    
     public TS_SURLHelper transferPng(BufferedImage image) {
         return TGS_UnSafe.compile(() -> {
             try ( var os = rs.getOutputStream()) {
@@ -425,7 +427,7 @@ public class TS_SURLHelper {
         println(text);
         println(TGS_FileHtmlUtils.endLines(true));
     }
-
+    
     public void html_error_msg(CharSequence text, CharSequence browserTitle, CharSequence favIcon, CharSequence optionalCustomDomain) {
         println(TGS_FileHtmlUtils.beginLines(browserTitle, true, false, 5, 5, favIcon, true, optionalCustomDomain));
         html_error_msg(text);
