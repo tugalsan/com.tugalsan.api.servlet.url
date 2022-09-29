@@ -18,6 +18,7 @@ import com.tugalsan.api.servlet.url.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.time.client.*;
 import com.tugalsan.api.unsafe.client.*;
+import com.tugalsan.api.unsafe.server.TS_UnSafe;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 
@@ -356,7 +357,7 @@ public class TS_SURLHelper {
     }
     
     private PrintWriter getPrintWriter() {
-        return TGS_UnSafe.compileSafe(() -> {
+        return TS_UnSafe.compileSafe(() -> {
             var exists = printWriter.get();
             if (exists == null) {
                 printWriter.set(rs.getWriter());
