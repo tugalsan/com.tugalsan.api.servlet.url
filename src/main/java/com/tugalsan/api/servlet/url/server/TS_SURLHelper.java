@@ -374,7 +374,7 @@ public class TS_SURLHelper {
     
     final public void print(CharSequence s) {
         if (printWriterClosed.get()) {
-            d.cr("print", "printWriter closed already!");
+            d.cr("print", "printWriter closed already! for->", s);
             return;
         }
         getPrintWriter().write(s.toString());
