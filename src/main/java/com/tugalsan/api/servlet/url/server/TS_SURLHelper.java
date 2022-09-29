@@ -363,10 +363,7 @@ public class TS_SURLHelper {
                 exists = printWriter.get();
             }
             return exists;
-        }, e -> {
-            e.printStackTrace();
-            return TGS_UnSafe.catchMeIfUCanReturns(e);
-        });
+        }, e -> TGS_UnSafe.catchMeIfUCanReturns(e));//should throw!
     }
     final private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
     final private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
