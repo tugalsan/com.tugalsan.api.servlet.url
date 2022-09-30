@@ -9,7 +9,7 @@ public class TS_SURLExecutorList {
 
     final private static TS_Log d = TS_Log.of(TS_SURLExecutorList.class);
 
-    final public static TS_ListSync<TGS_Pack2<String, TS_SURLExecutor>> SYNC = new TS_ListSync();
+    final public static TS_ThreadSafeLst<TGS_Pack2<String, TS_SURLExecutor>> SYNC = new TS_ThreadSafeLst();
 
     public static TS_SURLExecutor add(TS_SURLExecutor exe) {
         SYNC.add(new TGS_Pack2(exe.name(), exe));
