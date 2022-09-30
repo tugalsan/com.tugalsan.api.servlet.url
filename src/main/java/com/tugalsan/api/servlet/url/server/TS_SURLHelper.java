@@ -11,7 +11,6 @@ import java.net.*;
 import java.util.stream.*;
 import javax.imageio.*;
 import com.tugalsan.api.file.html.client.*;
-import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.network.server.*;
 import com.tugalsan.api.servlet.url.client.*;
@@ -193,7 +192,7 @@ public class TS_SURLHelper {
                 compiledAsPlain = true;
             } else {
                 compiledAsFile = true;
-                printWriterClosed.set(Boolean.TRUE);
+                printWriterClosed = Boolean.TRUE;
             }
             rs.setContentType(mimeStr);
             d.ci("setContentType", "mime", mimeStr);
@@ -334,7 +333,7 @@ public class TS_SURLHelper {
 
     //BASIC-PRINTER---------------------------------------------------------------
     final public void flushAndContinue() {
-        if (printWriterClosed.get()) {
+        if (printWriterClosed) {
             return;
         }
         var exists = getPrintWriter();
@@ -344,32 +343,30 @@ public class TS_SURLHelper {
     }
 
     final public void flushAndClose() {
-        if (printWriterClosed.get() || isCompiledAsFile()) {
+        if (printWriterClosed || isCompiledAsFile()) {
             return;
         }
         var exists = getPrintWriter();
         if (exists != null) {
             exists.flush();
             exists.close();
-            printWriterClosed.set(Boolean.TRUE);
+            printWriterClosed = Boolean.TRUE;
         }
     }
 
     private PrintWriter getPrintWriter() {
         return TGS_UnSafe.compile(() -> {
-            var exists = printWriter.get();
-            if (exists == null) {
-                printWriter.set(rs.getWriter());
-                exists = printWriter.get();
+            if (printWriter == null) {
+                printWriter = rs.getWriter();
             }
-            return exists;
+            return printWriter;
         }, e -> TGS_UnSafe.catchMeIfUCanReturns(e));//should throw!
     }
-    final private TGS_ListSyncItem<PrintWriter> printWriter = new TGS_ListSyncItem();
-    final private TGS_ListSyncItem<Boolean> printWriterClosed = new TGS_ListSyncItem(Boolean.FALSE);
+    private volatile PrintWriter printWriter;
+    private volatile boolean printWriterClosed = false;
 
     final public void print(CharSequence s) {
-        if (printWriterClosed.get()) {
+        if (printWriterClosed) {
             d.cr("print", "printWriter closed already! for->", s);
             return;
         }
