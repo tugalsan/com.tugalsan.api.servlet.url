@@ -365,12 +365,13 @@ public class TS_SURLHelper {
     private volatile PrintWriter printWriter;
     private volatile boolean printWriterClosed = false;
 
-    final public void print(CharSequence s) {
+    final public boolean print(CharSequence s) {
         if (printWriterClosed) {
             d.cr("print", "printWriter closed already! for->", s);
-            return;
+            return false;
         }
         getPrintWriter().write(s.toString());
+        return true;
     }
 
     final public void println() {
@@ -378,8 +379,9 @@ public class TS_SURLHelper {
     }
 
     final public void println(CharSequence s) {
-        print(s);
-        println();
+        if (print(s)) {
+            println();
+        }
     }
 
     public void println(Throwable t) {
