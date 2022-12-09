@@ -4,7 +4,7 @@ import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import com.tugalsan.api.servlet.url.client.*;
 
-@WebServlet("/" + TGS_SURLUtils.LOC_NAME_ALIAS0)//AS IN "/s"
+@WebServlet("/" + TGS_SURLUtils.LOC_NAME_ALIAS0)//AS IN "/sh"
 public class TS_SURLWebServletAlias0 extends HttpServlet {
 
     @Override
