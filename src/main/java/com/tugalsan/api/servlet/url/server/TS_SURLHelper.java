@@ -104,19 +104,19 @@ public class TS_SURLHelper {
 
     //CONTENT--------------------------------------------------------------------------------------------
     public final TS_SURLHelper compileForFile(Path filePath) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var mimeType = context.getMimeType(filePath.toString());
             setContentType(mimeType == null ? "application/octet-stream" : mimeType);
             rs.setCharacterEncoding("UTF-8");
             var contentLength = (int) filePath.toFile().length();
-            d.ci("execute", "contentLength", contentLength);
+            d.ci("run", "contentLength", contentLength);
             rs.setContentLength(contentLength);
             var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
             rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
             return this;
         }, e -> {
             e.printStackTrace();
-            return TGS_UnSafe.catchMeIfUCanReturns(e);
+            return TGS_UnSafe.thrwReturns(e);
         });
     }
 
@@ -175,16 +175,16 @@ public class TS_SURLHelper {
     private boolean compiledAsFile = false;
 
     private TS_SURLHelper setContentType(CharSequence mime) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var mimeStr = mime.toString();
             if (isCompiledAsPlain()) {
-                TGS_UnSafe.catchMeIfUCan(d.className, "setContentType(CharSequence mime)", "Already compiled as Plain");
+                TGS_UnSafe.thrw(d.className, "setContentType(CharSequence mime)", "Already compiled as Plain");
             }
             if (isCompiledAsHtml()) {
-                TGS_UnSafe.catchMeIfUCan(d.className, "setContentType(CharSequence mime)", "Already compiled as Html");
+                TGS_UnSafe.thrw(d.className, "setContentType(CharSequence mime)", "Already compiled as Html");
             }
             if (isCompiledAsFile()) {
-                TGS_UnSafe.catchMeIfUCan(d.className, "setContentType(CharSequence mime)", "Already compiled as File");
+                TGS_UnSafe.thrw(d.className, "setContentType(CharSequence mime)", "Already compiled as File");
             }
             if (mimeStr.startsWith("text/html")) {
                 compiledAsHtml = true;
@@ -201,7 +201,7 @@ public class TS_SURLHelper {
     }
 
     public TS_SURLHelper(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
-        TGS_UnSafe.execute(() -> {
+        TGS_UnSafe.run(() -> {
             this.hs = hs;
             this.rq = rq;
             this.rs = rs;
@@ -256,7 +256,7 @@ public class TS_SURLHelper {
 
     @Deprecated
     public Boolean getParameterBoolean(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var paramValue = getParameter(paramName, new String[]{"true", "false"});
             if (paramValue == null) {
                 return null;
@@ -264,7 +264,7 @@ public class TS_SURLHelper {
             return Boolean.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.catchMeIfUCanReturns(e);
+                return TGS_UnSafe.thrwReturns(e);
             }
             return null;
         });
@@ -272,7 +272,7 @@ public class TS_SURLHelper {
 
     @Deprecated
     public Integer getParameterInteger(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var paramValue = getParameter(paramName, assure);
             if (paramValue == null) {
                 return null;
@@ -280,7 +280,7 @@ public class TS_SURLHelper {
             return Integer.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.catchMeIfUCanReturns(e);
+                return TGS_UnSafe.thrwReturns(e);
             }
             return null;
         });
@@ -288,7 +288,7 @@ public class TS_SURLHelper {
 
     @Deprecated
     public Long getParameterLong(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var paramValue = getParameter(paramName, assure);
             if (paramValue == null) {
                 return null;
@@ -296,7 +296,7 @@ public class TS_SURLHelper {
             return Long.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.catchMeIfUCanReturns(e);
+                return TGS_UnSafe.thrwReturns(e);
             }
             return null;
         });
@@ -304,7 +304,7 @@ public class TS_SURLHelper {
 
     @Deprecated
     public TGS_Time getParameterDate(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var paramValue = getParameterLong(paramName, assure);
             if (paramValue == null) {
                 return null;
@@ -312,7 +312,7 @@ public class TS_SURLHelper {
             return TGS_Time.ofDate(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.catchMeIfUCanReturns(e);
+                return TGS_UnSafe.thrwReturns(e);
             }
             return null;
         });
@@ -320,15 +320,15 @@ public class TS_SURLHelper {
 
     //ERROR-HANDLER---------------------------------------------------------------
     final public void throwError(String text) {
-        TGS_UnSafe.catchMeIfUCan(d.className, "throwError(String text)", text);
+        TGS_UnSafe.thrw(d.className, "throwError(String text)", text);
     }
 
     final public void throwError(Throwable t) {
-        TGS_UnSafe.catchMeIfUCan(t);
+        TGS_UnSafe.thrw(t);
     }
 
     final public void throwError(CharSequence className, CharSequence funcName, Object errorContent) {
-        TGS_UnSafe.catchMeIfUCan(className, funcName, errorContent);
+        TGS_UnSafe.thrw(className, funcName, errorContent);
     }
 
     //BASIC-PRINTER---------------------------------------------------------------
@@ -355,12 +355,12 @@ public class TS_SURLHelper {
     }
 
     private PrintWriter getPrintWriter() {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             if (printWriter == null) {
                 printWriter = rs.getWriter();
             }
             return printWriter;
-        }, e -> TGS_UnSafe.catchMeIfUCanReturns(e));//should throw!
+        }, e -> TGS_UnSafe.thrwReturns(e));//should throw!
     }
     private volatile PrintWriter printWriter;
     private volatile boolean printWriterClosed = false;
@@ -410,7 +410,7 @@ public class TS_SURLHelper {
     }
 
     public TS_SURLHelper transferPng(BufferedImage image) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             try ( var os = rs.getOutputStream()) {
                 ImageIO.write(image, "png", os);
             }

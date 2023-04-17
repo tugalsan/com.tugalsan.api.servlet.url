@@ -25,7 +25,7 @@ public class TS_SURLWebServlet extends HttpServlet {
 
     public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
         var shw = new TS_SURLHelper(servlet, rq, rs);
-        TGS_UnSafe.execute(() -> {
+        TGS_UnSafe.run(() -> {
             if (shw.servletName == null) {
                 shw.throwError("servletName is null");
             } else {
@@ -42,7 +42,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                     shw.flushAndClose();
                     return;
                 }
-                si.value1.execute(shw);
+                si.value1.run(shw);
             }
             shw.flushAndClose();
         }, e -> shw.handleError(e));
