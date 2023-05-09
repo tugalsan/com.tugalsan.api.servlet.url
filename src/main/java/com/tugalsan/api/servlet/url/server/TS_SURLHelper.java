@@ -333,7 +333,7 @@ public class TS_SURLHelper {
 
     //BASIC-PRINTER---------------------------------------------------------------
     final public void flushAndContinue() {
-        if (printWriterClosed) {
+        if (printWriterClosed || isCompiledAsFile()) {
             return;
         }
         var exists = getPrintWriter();
