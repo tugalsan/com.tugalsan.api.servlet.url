@@ -93,7 +93,7 @@ public class TS_SURLHelper {
         println("</script>");
     }
 
-    public void addHTML_LinkBR(CharSequence text, CharSequence url) {
+    public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
         println(TGS_StringUtils.concat("<a href=\"", url, "\">", text, "</a><br/>"));
     }
 
@@ -208,7 +208,7 @@ public class TS_SURLHelper {
             context = hs.getServletContext();
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             clientIp = TS_NetworkIPUtils.getIPClient(rq);
-            url = TS_UrlUtils.toUrl(rq).url.toString();
+            url = TS_UrlUtils.toUrl(rq);
             servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
             if (servletName == null || servletName.isEmpty()) {
                 servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
@@ -219,7 +219,8 @@ public class TS_SURLHelper {
     public HttpServlet hs;
     public HttpServletRequest rq;
     public HttpServletResponse rs;
-    public String clientIp, servletName, url;
+    public String clientIp, servletName;
+    public TGS_Url url;
 
     //GET PARAMETER-----------------------------------------------------------------------------------------
     public String getParameterFromUrlSafe64(CharSequence paramName) {
@@ -411,7 +412,7 @@ public class TS_SURLHelper {
 
     public TS_SURLHelper transferPng(BufferedImage image) {
         return TGS_UnSafe.call(() -> {
-            try ( var os = rs.getOutputStream()) {
+            try (var os = rs.getOutputStream()) {
                 ImageIO.write(image, "png", os);
             }
             return this;
