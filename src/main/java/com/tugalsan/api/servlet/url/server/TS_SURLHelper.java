@@ -94,7 +94,9 @@ public class TS_SURLHelper {
     }
 
     public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
-        println(TGS_StringUtils.concat("<a href=\"", url, "\">", text, "</a><br/>"));
+        var html = TGS_StringUtils.concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
+        d.ce("addHTML_LinkBR", html);
+        println(html);
     }
 
     //PRINT--------------------------------------------------------------------------------------------
