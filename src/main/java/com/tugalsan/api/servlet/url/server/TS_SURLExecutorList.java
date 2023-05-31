@@ -2,17 +2,17 @@ package com.tugalsan.api.servlet.url.server;
 
 import java.util.*;
 import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.thread.server.*;
 
 public class TS_SURLExecutorList {
 
     final private static TS_Log d = TS_Log.of(TS_SURLExecutorList.class);
 
-    final public static TS_ThreadSafeLst<TGS_Pack2<String, TS_SURLExecutor>> SYNC = new TS_ThreadSafeLst();
+    final public static TS_ThreadSafeLst<TGS_Tuple2<String, TS_SURLExecutor>> SYNC = new TS_ThreadSafeLst();
 
     public static TS_SURLExecutor add(TS_SURLExecutor exe) {
-        SYNC.add(new TGS_Pack2(exe.name(), exe));
+        SYNC.add(new TGS_Tuple2(exe.name(), exe));
         d.cr("add", exe.name());
         return exe;
     }
@@ -27,7 +27,7 @@ public class TS_SURLExecutorList {
         return exe;
     }
 
-    public static TGS_Pack2<String, TS_SURLExecutor> get(CharSequence name) {
+    public static TGS_Tuple2<String, TS_SURLExecutor> get(CharSequence name) {
         return SYNC.findFirst(item -> Objects.equals(item.value0, name));
     }
 }
