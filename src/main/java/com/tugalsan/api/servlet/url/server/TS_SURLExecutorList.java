@@ -2,14 +2,14 @@ package com.tugalsan.api.servlet.url.server;
 
 import java.util.*;
 import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.thread.server.safe.TS_ThreadSafeLst;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.tuple.client.*;
 
 public class TS_SURLExecutorList {
 
     final private static TS_Log d = TS_Log.of(TS_SURLExecutorList.class);
 
-    final public static TS_ThreadSafeLst<TGS_Tuple2<String, TS_SURLExecutor>> SYNC = new TS_ThreadSafeLst();
+    final public static TS_ThreadSyncLst<TGS_Tuple2<String, TS_SURLExecutor>> SYNC = new TS_ThreadSyncLst();
 
     public static TS_SURLExecutor add(TS_SURLExecutor exe) {
         SYNC.add(new TGS_Tuple2(exe.name(), exe));
