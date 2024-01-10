@@ -179,7 +179,6 @@ public class TS_SURLHelper {
 
     private TS_SURLHelper setContentType(CharSequence mime) {
         return TGS_UnSafe.call(() -> {
-            var mimeStr = mime.toString();
             if (isCompiledAsPlain()) {
                 TGS_UnSafe.thrw(d.className, "setContentType(CharSequence mime)", "Already compiled as Plain");
             }
@@ -189,6 +188,7 @@ public class TS_SURLHelper {
             if (isCompiledAsFile()) {
                 TGS_UnSafe.thrw(d.className, "setContentType(CharSequence mime)", "Already compiled as File");
             }
+            var mimeStr = mime.toString();
             if (mimeStr.startsWith("text/html")) {
                 compiledAsHtml = true;
             } else if (mimeStr.startsWith("text/plain")) {
@@ -208,6 +208,7 @@ public class TS_SURLHelper {
             this.hs = hs;
             this.rq = rq;
             this.rs = rs;
+//            this.writer = TS_SURLHelperWriter.of(this);
             context = hs.getServletContext();
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             clientIp = TS_NetworkIPUtils.getIPClient(rq);
@@ -219,6 +220,7 @@ public class TS_SURLHelper {
         });
     }
     public ServletContext context;
+//    public TS_SURLHelperWriter writer;
     public HttpServlet hs;
     public HttpServletRequest rq;
     public HttpServletResponse rs;
@@ -419,6 +421,10 @@ public class TS_SURLHelper {
 
     //BASIC-ERROR-HANDLER---------------------------------------------------------------
     public void handleError(Throwable t) {
+        t.printStackTrace();
+        if (isCompiledAsFile() || printWriterClosed) {
+            return;
+        }
         d.ce("handleError", "url", url);
         t.printStackTrace();
         if (isCompiledAsHtml()) {
