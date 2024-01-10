@@ -23,6 +23,7 @@ import com.tugalsan.api.url.server.*;
 public class TS_SURLHelper {
 
     final private static TS_Log d = TS_Log.of(TS_SURLHelper.class);
+    final public static boolean DISABLE_VERBOSE_ERROR_FOR_printWriter_FOR_IllegalStateException = true;
 
     public static boolean CONTENT_TYPE_PLAIN() {
         return true;
@@ -212,7 +213,7 @@ public class TS_SURLHelper {
             clientIp = TS_NetworkIPUtils.getIPClient(rq);
             url = TS_UrlUtils.toUrl(rq);
             servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
-            if (servletName == null || servletName.isEmpty()) {
+            if (TGS_StringUtils.isNullOrEmpty(servletName)) {
                 servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
             }
         });
@@ -335,26 +336,30 @@ public class TS_SURLHelper {
     }
 
     //BASIC-PRINTER---------------------------------------------------------------
-    final public void flushAndContinue() {
+    final public boolean flushAndContinue() {
         if (printWriterClosed || isCompiledAsFile()) {
-            return;
+            return false;
         }
-        var exists = getPrintWriter();
-        if (exists != null) {
-            exists.flush();
+        var writer = getPrintWriter();
+        if (writer == null) {
+            return false;
         }
+        writer.flush();
+        return true;
     }
 
-    final public void flushAndClose() {
+    final public boolean flushAndClose() {
         if (printWriterClosed || isCompiledAsFile()) {
-            return;
+            return false;
         }
-        var exists = getPrintWriter();
-        if (exists != null) {
-            exists.flush();
-            exists.close();
-            printWriterClosed = Boolean.TRUE;
+        var writer = getPrintWriter();
+        if (writer == null) {
+            return false;
         }
+        printWriterClosed = Boolean.TRUE;
+        writer.flush();
+        writer.close();
+        return true;
     }
 
     private PrintWriter getPrintWriter() {
@@ -362,8 +367,19 @@ public class TS_SURLHelper {
             if (printWriter == null) {
                 printWriter = rs.getWriter();
             }
+            if (printWriter == null) {
+                printWriterClosed = true;
+            }
             return printWriter;
-        }, e -> TGS_UnSafe.thrwReturns(e));//should throw!
+        }, e -> {
+            printWriterClosed = true;
+            if (DISABLE_VERBOSE_ERROR_FOR_printWriter_FOR_IllegalStateException && e instanceof java.lang.IllegalStateException) {
+                d.ce("getPrintWriter", "ERROR: java.lang.IllegalStateException detected", e.getMessage());
+                return null;
+            } else {
+                return TGS_UnSafe.thrwReturns(e);
+            }
+        });//should throw!
     }
     private volatile PrintWriter printWriter;
     private volatile boolean printWriterClosed = false;
@@ -373,7 +389,11 @@ public class TS_SURLHelper {
             d.cr("print", "printWriter closed already! for->", s);
             return false;
         }
-        getPrintWriter().write(s.toString());
+        var writer = getPrintWriter();
+        if (writer == null) {
+            return false;
+        }
+        writer.write(s.toString());
         return true;
     }
 
