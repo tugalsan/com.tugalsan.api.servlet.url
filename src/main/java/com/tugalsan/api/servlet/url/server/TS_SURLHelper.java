@@ -25,85 +25,7 @@ public class TS_SURLHelper {
     final private static TS_Log d = TS_Log.of(TS_SURLHelper.class);
     final public static boolean DISABLE_VERBOSE_ERROR_FOR_printWriter_FOR_IllegalStateException = true;
 
-    public static boolean CONTENT_TYPE_PLAIN() {
-        return true;
-    }
-
-    public static boolean CONTENT_TYPE_HTML() {
-        return false;
-    }
-
-    //TXT----------------------------------------------------------------------------------------------
-    public void addText_Line(Throwable t) {
-        println(t.getMessage());
-        Arrays.stream(t.getStackTrace()).forEachOrdered(ste -> println(ste.toString()));
-    }
-
-    public void addHTML_HeaderBR(CharSequence text) {
-        println(TGS_StringUtils.concat("<h3>", text, "</h3><br/>"));
-    }
-
-    public void addHTML_HeaderBR(TGS_FileHtmlText text) {
-        println(TGS_StringUtils.concat("<h3>", text.toString(), "</h3><br/>"));
-    }
-
-    public void addHTML_P(String text) {
-        println(TGS_StringUtils.concat("<p>", text, "</p>"));
-    }
-
-    public void addHTML_P(TGS_FileHtmlText text) {
-        println(TGS_StringUtils.concat("<p>", text.toString(), "</p>"));
-    }
-
-    public void addHTML_TextBR(List<String> texts) {
-        texts.stream().forEachOrdered(s -> println(s + "<br/>"));
-    }
-
-    public void addHTML_TextBR(CharSequence text) {
-        println(text + "<br/>");
-    }
-
-    public void addHTML_TextBR(TGS_FileHtmlText text) {
-        println(text.toString() + "<br/>");
-    }
-
-    public void addHTML_BR(int count) {
-        IntStream.range(0, count).forEachOrdered(i -> println("<br/>"));
-    }
-
-    public void addHTML_ImgBR(TGS_Url source, Integer width, Integer height) {
-        println("<img src=\"" + source + "\""
-                + (width == null ? "" : TGS_StringUtils.concat(" width=\"", String.valueOf(width), "\""))
-                + (height == null ? "" : TGS_StringUtils.concat(" height=\"", String.valueOf(height), "\""))
-                + "/><br/>"
-        );
-    }
-
-    public void addHTML_Validator(CharSequence formName, CharSequence funcName,
-            CharSequence[] varNames, CharSequence[] varLables, CharSequence errorNull, CharSequence errorMax, int maxChar) {
-        println("<script>");
-        println("function " + funcName + "() {");
-        IntStream.range(0, varNames.length).forEachOrdered(i -> {
-            var sb = new StringBuilder();
-            sb.append("var p=document.forms[\"").append(formName).append("\"][\"").append(varNames[i]).append("\"].value;");
-            sb.append("if (p==null || p==\"\") {alert(\"").append(errorNull).append(" -> (").append(varLables[i]).append(")\"); return false;}");
-            sb.append("if (p.length > ").append(maxChar).append(") {alert(\"").append(errorMax).append(" -> (").append(varLables[i]).append(".maxChar: + ").append(maxChar).append(")\"); return false;}");
-            println(sb.toString());
-        });
-        println("}");
-        println("</script>");
-    }
-
-    public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
-        var html = TGS_StringUtils.concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
-        d.ce("addHTML_LinkBR", html);
-        println(html);
-    }
-
-    //PRINT--------------------------------------------------------------------------------------------
-    public void addHTML_Hidden(CharSequence label, CharSequence value) {
-        println(TGS_StringUtils.concat("<input id=\"", label, "\" name=\"", label, "\" type=\"hidden\" value=\"", value, "\">"));
-    }
+    
 
     //CONTENT--------------------------------------------------------------------------------------------
     public final TS_SURLHelper compileForFile(Path filePath) {
@@ -438,14 +360,7 @@ public class TS_SURLHelper {
         flushAndClose();
     }
 
-    public TS_SURLHelper transferPng(BufferedImage image) {
-        return TGS_UnSafe.call(() -> {
-            try (var os = rs.getOutputStream()) {
-                ImageIO.write(image, "png", os);
-            }
-            return this;
-        });
-    }
+    
 
     //ERROR-MSG-HTML
     public void html_error_msg(CharSequence text) {
@@ -456,5 +371,81 @@ public class TS_SURLHelper {
     public void html_error_msg(CharSequence text, CharSequence browserTitle, CharSequence favIcon, CharSequence optionalCustomDomain) {
         println(TGS_FileHtmlUtils.beginLines(browserTitle, true, false, 5, 5, favIcon, true, optionalCustomDomain));
         html_error_msg(text);
+    }
+    
+    //HTML----------------------------------------------------------------------------------------------
+    public void addHTML_HeaderBR(CharSequence text) {
+        println(TGS_StringUtils.concat("<h3>", text, "</h3><br/>"));
+    }
+
+    public void addHTML_HeaderBR(TGS_FileHtmlText text) {
+        println(TGS_StringUtils.concat("<h3>", text.toString(), "</h3><br/>"));
+    }
+
+    public void addHTML_P(String text) {
+        println(TGS_StringUtils.concat("<p>", text, "</p>"));
+    }
+
+    public void addHTML_P(TGS_FileHtmlText text) {
+        println(TGS_StringUtils.concat("<p>", text.toString(), "</p>"));
+    }
+
+    public void addHTML_TextBR(List<String> texts) {
+        texts.stream().forEachOrdered(s -> println(s + "<br/>"));
+    }
+
+    public void addHTML_TextBR(CharSequence text) {
+        println(text + "<br/>");
+    }
+
+    public void addHTML_TextBR(TGS_FileHtmlText text) {
+        println(text.toString() + "<br/>");
+    }
+
+    public void addHTML_BR(int count) {
+        IntStream.range(0, count).forEachOrdered(i -> println("<br/>"));
+    }
+
+    public void addHTML_ImgBR(TGS_Url source, Integer width, Integer height) {
+        println("<img src=\"" + source + "\""
+                + (width == null ? "" : TGS_StringUtils.concat(" width=\"", String.valueOf(width), "\""))
+                + (height == null ? "" : TGS_StringUtils.concat(" height=\"", String.valueOf(height), "\""))
+                + "/><br/>"
+        );
+    }
+
+    public void addHTML_Validator(CharSequence formName, CharSequence funcName,
+            CharSequence[] varNames, CharSequence[] varLables, CharSequence errorNull, CharSequence errorMax, int maxChar) {
+        println("<script>");
+        println("function " + funcName + "() {");
+        IntStream.range(0, varNames.length).forEachOrdered(i -> {
+            var sb = new StringBuilder();
+            sb.append("var p=document.forms[\"").append(formName).append("\"][\"").append(varNames[i]).append("\"].value;");
+            sb.append("if (p==null || p==\"\") {alert(\"").append(errorNull).append(" -> (").append(varLables[i]).append(")\"); return false;}");
+            sb.append("if (p.length > ").append(maxChar).append(") {alert(\"").append(errorMax).append(" -> (").append(varLables[i]).append(".maxChar: + ").append(maxChar).append(")\"); return false;}");
+            println(sb.toString());
+        });
+        println("}");
+        println("</script>");
+    }
+
+    public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
+        var html = TGS_StringUtils.concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
+        d.ce("addHTML_LinkBR", html);
+        println(html);
+    }
+
+    public void addHTML_Hidden(CharSequence label, CharSequence value) {
+        println(TGS_StringUtils.concat("<input id=\"", label, "\" name=\"", label, "\" type=\"hidden\" value=\"", value, "\">"));
+    }
+    
+    //PNG
+    public TS_SURLHelper transferPng(BufferedImage image) {
+        return TGS_UnSafe.call(() -> {
+            try (var os = rs.getOutputStream()) {
+                ImageIO.write(image, "png", os);
+            }
+            return this;
+        });
     }
 }
