@@ -45,7 +45,7 @@ public class TS_SURLHandler01WCachePolicy {
         });
     }
 
-    public void text(TGS_RunnableType1<TS_SURLHandler02ForPlainText> text) {
+    public void txt(TGS_RunnableType1<TS_SURLHandler02ForPlainText> text) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainText.of(hs, rq, rs, noCache, pw);
