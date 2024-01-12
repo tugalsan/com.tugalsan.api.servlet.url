@@ -6,7 +6,7 @@ import javax.servlet.http.*;
 
 public class TS_SURLHandler {
 
-    final private static TS_Log d = TS_Log.of(TS_SURLHandler.class);
+//    final private static TS_Log d = TS_Log.of(TS_SURLHandler.class);
 
     private TS_SURLHandler(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
         this.hs = hs;
