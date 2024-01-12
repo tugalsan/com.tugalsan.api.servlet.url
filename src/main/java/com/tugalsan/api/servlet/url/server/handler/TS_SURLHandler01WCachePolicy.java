@@ -36,9 +36,9 @@ public class TS_SURLHandler01WCachePolicy {
     }
 
     //see TS_FileImageUtils.formatNames. Example "png"
-    public void img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFilePng> img) {
+    public void img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
         TGS_UnSafe.run(() -> {
-            var handler = TS_SURLHandler02ForFilePng.of(hs, rq, rs, noCache);
+            var handler = TS_SURLHandler02ForFileImg.of(hs, rq, rs, noCache, formatName);
             var renderedImage = img.call(handler);
             try (var os = handler.rs.getOutputStream()) {
                 ImageIO.write(renderedImage, formatName, os);
