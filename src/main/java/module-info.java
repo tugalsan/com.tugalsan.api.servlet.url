@@ -16,4 +16,5 @@ module com.tugalsan.api.servlet.url {
     requires com.tugalsan.api.file.html;
     exports com.tugalsan.api.servlet.url.client;
     exports com.tugalsan.api.servlet.url.server;
+    exports com.tugalsan.api.servlet.url.server.handler;
 }
