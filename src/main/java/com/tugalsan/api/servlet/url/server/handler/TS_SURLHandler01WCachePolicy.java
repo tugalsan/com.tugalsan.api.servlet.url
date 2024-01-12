@@ -3,9 +3,11 @@ package com.tugalsan.api.servlet.url.server.handler;
 import com.tugalsan.api.callable.client.TGS_CallableType1;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.runnable.client.TGS_RunnableType1;
+import com.tugalsan.api.stream.server.TS_StreamUtils;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
@@ -31,8 +33,12 @@ public class TS_SURLHandler01WCachePolicy {
         return new TS_SURLHandler01WCachePolicy(hs, rq, rs, noCache);
     }
 
-    public TS_SURLHandler02ForFileDownload download(Path filePath) {
-        return TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache, filePath);
+    public void download(Path filePath, TGS_RunnableType1<TS_SURLHandler02ForFileDownload> img) {
+        TGS_UnSafe.run(() -> {
+            var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache, filePath);
+            img.run(handler);
+            TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
+        });
     }
 
     //see TS_FileImageUtils.formatNames. Example "png"
