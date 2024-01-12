@@ -16,62 +16,33 @@ abstract public class TS_SURLHandler02ForPlainAbstract extends TS_SURLHandler02F
         super(hs, rq, rs, noCache);
 
     }
-    private volatile PrintWriter printWriter;
 
-    final public boolean flushAndClose() {
-        if (printWriter == null) {
-            return false;
-        }
-        printWriter.flush();
-        printWriter.close();
-        printWriter = null;
-        return true;
+    final public void flush(PrintWriter pw) {
+        pw.flush();
     }
 
-    final public boolean flushAndContinue() {
-        if (printWriter == null) {
-            return false;
-        }
-        printWriter.flush();
-        return true;
+    final public void print(PrintWriter pw, CharSequence s) {
+        pw.print(s.toString());
     }
 
-    final public boolean print(CharSequence s) {
-        if (printWriter == null) {
-            d.cr("print", "printWriter closed already! for->", s);
-            return false;
-        }
-        printWriter.write(s.toString());
-        return true;
+    final public void println(PrintWriter pw) {
+        print(pw, "\n");
     }
 
-    final public boolean println() {
-        return print("\n");
+    final public void println(PrintWriter pw, CharSequence s) {
+        print(pw, s);
+        println(pw);
     }
 
-    final public boolean println(CharSequence s) {
-        return print(s) && println();
-    }
-
-    public boolean println(Throwable t) {
+    public void println(PrintWriter pw, Throwable t) {
         d.ce("handleError", "url", url);
         d.ct("handleError", t);
-        if (!print("ERROR: ")) {
-            return false;
-        }
-        if (!println(t.getMessage())) {
-            return false;
-        }
-        return !Arrays.stream(t.getStackTrace())
-                .map(ste -> println(ste.toString()))
-                .filter(bool -> !bool)
-                .findAny().isPresent();
+        print(pw, "ERROR: ");
+        println(pw, t.getMessage());
+        println(pw, Arrays.stream(t.getStackTrace()).map(ste -> ste.toString()).toList());
     }
 
-    public boolean println(List<String> lst) {
-        return !lst.stream()
-                .map(str -> println(str))
-                .filter(bool -> !bool)
-                .findAny().isPresent();
+    public void println(PrintWriter pw, List<String> lst) {
+        lst.stream().forEachOrdered(str -> println(pw, str));
     }
 }
