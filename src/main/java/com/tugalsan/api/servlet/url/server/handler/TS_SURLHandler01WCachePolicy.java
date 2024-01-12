@@ -35,12 +35,13 @@ public class TS_SURLHandler01WCachePolicy {
         return TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache, filePath);
     }
 
-    public void png(TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFilePng> png) {
+    //see TS_FileImageUtils.formatNames. Example "png"
+    public void img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFilePng> img) {
         TGS_UnSafe.run(() -> {
             var handler = TS_SURLHandler02ForFilePng.of(hs, rq, rs, noCache);
-            var renderedImage = png.call(handler);
+            var renderedImage = img.call(handler);
             try (var os = handler.rs.getOutputStream()) {
-                ImageIO.write(renderedImage, "png", os);
+                ImageIO.write(renderedImage, formatName, os);
             }
         });
     }
