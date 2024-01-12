@@ -8,6 +8,7 @@ module com.tugalsan.api.servlet.url {
     requires com.tugalsan.api.runnable;
     requires com.tugalsan.api.tuple;
     requires com.tugalsan.api.log;
+    requires com.tugalsan.api.coronator;
     requires com.tugalsan.api.thread;
     requires com.tugalsan.api.list;
     requires com.tugalsan.api.network;

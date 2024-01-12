@@ -1,13 +1,16 @@
 package com.tugalsan.api.servlet.url.server;
 
+import com.tugalsan.api.coronator.client.*;
 import java.util.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.servlet.url.client.*;
-import com.tugalsan.api.string.client.TGS_StringUtils;
+import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
+import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.unsafe.client.*;
+import com.tugalsan.api.url.server.*;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 public class TS_SURLWebServlet extends HttpServlet {
@@ -25,27 +28,36 @@ public class TS_SURLWebServlet extends HttpServlet {
     }
 
     public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        var shw = new TS_SURLHelper(servlet, rq, rs);
-        TGS_UnSafe.run(() -> {
-            if (TGS_StringUtils.isNullOrEmpty(shw.servletName)) {
-                shw.throwError("servletName is empty");
+        try {
+            var servletName = TGS_Coronator.ofStr().coronateAs(val -> {
+                var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
+                if (TGS_StringUtils.isNullOrEmpty(tmp)) {
+                    tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
+                }
+                if (TGS_StringUtils.isNullOrEmpty(tmp)) {
+                    TGS_UnSafe.thrw(d.className, "call", "servletName is empty");
+                    return null;
+                }
+                return tmp;
+            });
+            var servletPack = TS_SURLExecutorList.get(servletName);
+            if (servletPack != null) {
+                servletPack.value1.run(servlet, rq, rs);
                 return;
             }
-            var servletPack = TS_SURLExecutorList.get(shw.servletName);
-            if (servletPack == null) {
-                if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, shw.servletName)).findAny().isPresent()) {
-                    shw.flushAndClose();
-                    return;
-                }
+            if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
+                TS_SURLPrintWriter.useOnce(
+                        TS_SURLHandler.of(servlet, rq, rs).permitNoCache().plain(),
+                        printWriter -> printWriter.close()
+                );
                 TS_SURLExecutorList.SYNC.forEach(item -> {
                     d.ce("call", "-", item.value0);
                 });
-                shw.throwError("servletName not identified: [" + shw.servletName + "]");
-                return;
+                TGS_UnSafe.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
             }
-            servletPack.value1.run(shw);
-            shw.flushAndClose();
-        }, e -> shw.handleError(e));
+        } catch (Exception e) {
+            d.ci("call", e);
+        }
     }
     public static List<String> SKIP_ERRORS_FOR_SERVLETNAMES = TGS_ListUtils.of();
 }

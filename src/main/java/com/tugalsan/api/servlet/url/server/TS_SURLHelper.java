@@ -25,8 +25,6 @@ public class TS_SURLHelper {
     final private static TS_Log d = TS_Log.of(TS_SURLHelper.class);
     final public static boolean DISABLE_VERBOSE_ERROR_FOR_printWriter_FOR_IllegalStateException = true;
 
-    
-
     //CONTENT--------------------------------------------------------------------------------------------
     public final TS_SURLHelper compileForFile(Path filePath) {
         return TGS_UnSafe.call(() -> {
@@ -125,7 +123,11 @@ public class TS_SURLHelper {
         });
     }
 
-    public TS_SURLHelper(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
+    public static TS_SURLHelper of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
+        return new TS_SURLHelper(hs, rq, rs);
+    }
+
+    private TS_SURLHelper(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs) {
         TGS_UnSafe.run(() -> {
             this.hs = hs;
             this.rq = rq;
@@ -360,8 +362,6 @@ public class TS_SURLHelper {
         flushAndClose();
     }
 
-    
-
     //ERROR-MSG-HTML
     public void html_error_msg(CharSequence text) {
         println(text);
@@ -372,7 +372,7 @@ public class TS_SURLHelper {
         println(TGS_FileHtmlUtils.beginLines(browserTitle, true, false, 5, 5, favIcon, true, optionalCustomDomain));
         html_error_msg(text);
     }
-    
+
     //HTML----------------------------------------------------------------------------------------------
     public void addHTML_HeaderBR(CharSequence text) {
         println(TGS_StringUtils.concat("<h3>", text, "</h3><br/>"));
@@ -438,7 +438,7 @@ public class TS_SURLHelper {
     public void addHTML_Hidden(CharSequence label, CharSequence value) {
         println(TGS_StringUtils.concat("<input id=\"", label, "\" name=\"", label, "\" type=\"hidden\" value=\"", value, "\">"));
     }
-    
+
     //PNG
     public TS_SURLHelper transferPng(BufferedImage image) {
         return TGS_UnSafe.call(() -> {

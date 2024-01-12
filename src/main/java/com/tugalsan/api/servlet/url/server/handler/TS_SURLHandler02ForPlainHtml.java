@@ -7,7 +7,6 @@ import com.tugalsan.api.string.client.TGS_StringUtils;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import javax.servlet.http.HttpServlet;
@@ -29,16 +28,6 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
 
     public static TS_SURLHandler02ForPlainHtml of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
         return new TS_SURLHandler02ForPlainHtml(hs, rq, rs, noCache);
-    }
-
-    @Override
-    public void handleError(Throwable t) {
-        t.printStackTrace();
-        d.ce("handleError", "url", url);
-        println("<b>");
-        println("ERROR: " + t.toString());
-        Arrays.stream(t.getStackTrace()).forEachOrdered(ste -> println(ste.toString()));
-        println("</b>");
     }
 
     public void html_error_msg(CharSequence text) {
