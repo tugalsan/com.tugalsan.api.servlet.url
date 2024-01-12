@@ -46,10 +46,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 return;
             }
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
-                TS_SURLPrintWriter.useOnce(
-                        TS_SURLHandler.of(servlet, rq, rs).permitNoCache().plain(),
-                        printWriter -> printWriter.close()
-                );
+                TS_SURLHandler.of(servlet, rq, rs).permitNoCache().text(text -> text.pw.close());
                 TS_SURLExecutorList.SYNC.forEach(item -> {
                     d.ce("call", "-", item.value0);
                 });
