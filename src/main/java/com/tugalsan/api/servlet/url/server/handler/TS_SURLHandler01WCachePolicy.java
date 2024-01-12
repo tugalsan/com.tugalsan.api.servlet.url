@@ -45,11 +45,11 @@ public class TS_SURLHandler01WCachePolicy {
         });
     }
 
-    public void txt(TGS_RunnableType1<TS_SURLHandler02ForPlainText> text) {
+    public void txt(TGS_RunnableType1<TS_SURLHandler02ForPlainText> txt) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainText.of(hs, rq, rs, noCache, pw);
-                text.run(handler);
+                txt.run(handler);
                 pw.flush();
             }
         } catch (IOException ex) {
