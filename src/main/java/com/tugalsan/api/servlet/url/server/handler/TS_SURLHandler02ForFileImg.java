@@ -19,7 +19,7 @@ public class TS_SURLHandler02ForFileImg extends TS_SURLHandler02ForAbstract {
         });
     }
 
-    public static TS_SURLHandler02ForFileImg of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, String formatName) {
+    protected static TS_SURLHandler02ForFileImg of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, String formatName) {
         return new TS_SURLHandler02ForFileImg(hs, rq, rs, noCache, formatName);
     }
 }

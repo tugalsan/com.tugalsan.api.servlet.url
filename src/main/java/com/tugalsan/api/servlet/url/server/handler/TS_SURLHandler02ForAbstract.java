@@ -20,7 +20,7 @@ public class TS_SURLHandler02ForAbstract {
 
     final private static TS_Log d = TS_Log.of(TS_SURLHandler02ForAbstract.class);
 
-    public TS_SURLHandler02ForAbstract(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
+    protected TS_SURLHandler02ForAbstract(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
         this.hs = hs;
         this.rq = rq;
         this.rs = rs;

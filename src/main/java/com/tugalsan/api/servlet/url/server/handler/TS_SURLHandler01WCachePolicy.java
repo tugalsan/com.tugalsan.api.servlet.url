@@ -31,7 +31,7 @@ public class TS_SURLHandler01WCachePolicy {
     final private HttpServletResponse rs;
     final private boolean noCache;
 
-    public static TS_SURLHandler01WCachePolicy of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
+    protected static TS_SURLHandler01WCachePolicy of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
         return new TS_SURLHandler01WCachePolicy(hs, rq, rs, noCache);
     }
 

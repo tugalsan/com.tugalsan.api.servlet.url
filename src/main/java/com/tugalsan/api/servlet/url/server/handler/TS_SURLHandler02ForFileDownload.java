@@ -14,7 +14,7 @@ public class TS_SURLHandler02ForFileDownload extends TS_SURLHandler02ForAbstract
         super(hs, rq, rs, noCache);
     }
 
-    public static TS_SURLHandler02ForFileDownload of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
+    protected static TS_SURLHandler02ForFileDownload of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
         return new TS_SURLHandler02ForFileDownload(hs, rq, rs, noCache);
     }
 

@@ -20,7 +20,7 @@ public class TS_SURLHandler02ForPlainJs extends TS_SURLHandler02ForPlainAbstract
         });
     }
 
-    public static TS_SURLHandler02ForPlainJs of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
+    protected static TS_SURLHandler02ForPlainJs of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
         return new TS_SURLHandler02ForPlainJs(hs, rq, rs, noCache, pw);
     }
 }

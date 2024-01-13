@@ -12,7 +12,7 @@ abstract public class TS_SURLHandler02ForPlainAbstract extends TS_SURLHandler02F
 
     final private static TS_Log d = TS_Log.of(TS_SURLHandler02ForPlainAbstract.class);
 
-    public TS_SURLHandler02ForPlainAbstract(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
+    protected TS_SURLHandler02ForPlainAbstract(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
         super(hs, rq, rs, noCache);
         this.pw = pw;
     }
