@@ -39,6 +39,11 @@ public class TS_SURLHandler01WCachePolicy {
         TGS_UnSafe.run(() -> {
             var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache);
             var filePath = download.call(handler);
+            if (filePath == null) {
+                d.ce("download", "filePath == null");
+                rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setCharacterEncoding(StandardCharsets.UTF_8.name());
             var mimeType = hs.getServletContext().getMimeType(filePath.toString());
@@ -51,6 +56,12 @@ public class TS_SURLHandler01WCachePolicy {
             var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
             rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
             TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
+        }, e -> {
+            TGS_UnSafe.run(() -> {
+                d.ct("download", e);
+                rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            });
         });
     }
 
