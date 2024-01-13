@@ -1,7 +1,6 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
 //AutoClosable Version of Helper
-import com.tugalsan.api.log.server.TS_Log;
 import javax.servlet.http.*;
 
 public class TS_SURLHandler {

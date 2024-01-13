@@ -7,6 +7,8 @@ import com.tugalsan.api.stream.server.TS_StreamUtils;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
@@ -33,10 +35,21 @@ public class TS_SURLHandler01WCachePolicy {
         return new TS_SURLHandler01WCachePolicy(hs, rq, rs, noCache);
     }
 
-    public void download(Path filePath, TGS_RunnableType1<TS_SURLHandler02ForFileDownload> img) {
+    public void download(TGS_CallableType1<Path, TS_SURLHandler02ForFileDownload> download) {
         TGS_UnSafe.run(() -> {
-            var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache, filePath);
-            img.run(handler);
+            var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache);
+            var filePath = download.call(handler);
+            rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            rs.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            var mimeType = hs.getServletContext().getMimeType(filePath.toString());
+            rs.setContentType(mimeType == null ? "application/octet-stream" : mimeType);
+            var contentLength = filePath.toFile().length();
+            d.ci("run", "contentLength", contentLength);
+            if (contentLength != -1) {
+                rs.setContentLengthLong(contentLength);
+            }
+            var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
+            rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
             TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
         });
     }
