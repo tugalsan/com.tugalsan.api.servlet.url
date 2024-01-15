@@ -42,11 +42,11 @@ public class TS_SURLWebServlet extends HttpServlet {
             });
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
-                servletPack.value1.run(servlet, rq, rs);
+                servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
                 return;
             }
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
-                TS_SURLHandler.of(servlet, rq, rs).permitNoCache().txt(text -> text.pw.close());
+                TS_SURLHandler.of(servlet, rq, rs).txt(text -> text.pw.close());
                 TS_SURLExecutorList.SYNC.forEach(item -> {
                     d.ce("call", "-", item.value0);
                 });

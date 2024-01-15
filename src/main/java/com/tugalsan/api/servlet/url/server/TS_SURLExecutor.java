@@ -1,11 +1,9 @@
 package com.tugalsan.api.servlet.url.server;
 
 import com.tugalsan.api.runnable.client.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 
-abstract public class TS_SURLExecutor implements TGS_RunnableType3<HttpServlet, HttpServletRequest, HttpServletResponse> {
+abstract public class TS_SURLExecutor implements TGS_RunnableType1<TS_SURLHandler> {
 
     abstract public String name();
 }

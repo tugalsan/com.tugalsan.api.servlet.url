@@ -26,9 +26,9 @@ public class TS_SURLHandler01WCachePolicy {
         this.rs = rs;
         this.noCache = noCache;
     }
-    final private HttpServlet hs;
-    final private HttpServletRequest rq;
-    final private HttpServletResponse rs;
+    final public HttpServlet hs;
+    final public HttpServletRequest rq;
+    final public HttpServletResponse rs;
     final private boolean noCache;
 
     protected static TS_SURLHandler01WCachePolicy of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache) {
