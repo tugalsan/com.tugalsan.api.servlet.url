@@ -36,8 +36,8 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
         println(TGS_FileHtmlUtils.endLines(true));
     }
 
-    public void html_error_msg(CharSequence text, CharSequence browserTitle, TGS_Url favIcon, TGS_Url optionalCustomDomain) {
-        println(TGS_FileHtmlUtils.beginLines(browserTitle, true, false, 5, 5, favIcon, true, optionalCustomDomain));
+    public void html_error_msg(CharSequence text, CharSequence browserTitle, TGS_Url favIcon, TGS_Url bootLoaderJs) {
+        println(TGS_FileHtmlUtils.beginLines(browserTitle, false, 5, 5, favIcon, true, bootLoaderJs));
         html_error_msg(text);
     }
 
