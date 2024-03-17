@@ -9,6 +9,8 @@ import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.servlet.url.client.*;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.server.*;
 
@@ -16,6 +18,7 @@ import com.tugalsan.api.url.server.*;
 public class TS_SURLWebServlet extends HttpServlet {
 
     final private static TS_Log d = TS_Log.of(TS_SURLWebServlet.class);
+    public static volatile TS_ThreadSyncTrigger killTrigger = null;
 
     @Override
     public void doGet(HttpServletRequest rq, HttpServletResponse rs) {
@@ -28,7 +31,7 @@ public class TS_SURLWebServlet extends HttpServlet {
     }
 
     public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        try {
+        TGS_UnSafe.run(() -> {
             var servletName = TGS_Coronator.ofStr().coronateAs(val -> {
                 var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
                 if (TGS_StringUtils.isNullOrEmpty(tmp)) {
@@ -42,7 +45,9 @@ public class TS_SURLWebServlet extends HttpServlet {
             });
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
-                servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
+                    servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                });
                 return;
             }
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
@@ -52,9 +57,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 });
                 TGS_UnSafe.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
             }
-        } catch (Exception e) {
-            d.ci("call", e);
-        }
+        }, e -> d.ce("call", e));
     }
     public static List<String> SKIP_ERRORS_FOR_SERVLETNAMES = TGS_ListUtils.of();
 }
