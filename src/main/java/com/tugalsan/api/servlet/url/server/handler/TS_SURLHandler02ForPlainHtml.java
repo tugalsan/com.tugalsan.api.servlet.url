@@ -99,7 +99,7 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
 
     public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
         var html = TGS_StringUtils.concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
-        d.ce("addHTML_LinkBR", html);
+        d.ci("addHTML_LinkBR", html);
         println(html);
     }
 

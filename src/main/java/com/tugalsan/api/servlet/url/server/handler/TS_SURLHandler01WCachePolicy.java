@@ -60,7 +60,6 @@ public class TS_SURLHandler01WCachePolicy {
             TGS_UnSafe.run(() -> {
                 d.ct("download", e);
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
             });
         });
     }
