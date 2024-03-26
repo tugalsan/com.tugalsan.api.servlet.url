@@ -46,7 +46,9 @@ public class TS_SURLWebServlet extends HttpServlet {
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
                 TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
-                    servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                    TGS_UnSafe.run(() -> {
+                        servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                    }, e -> d.ct("call", e));
                 });
                 return;
             }
