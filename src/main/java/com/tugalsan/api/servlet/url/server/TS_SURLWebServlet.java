@@ -57,7 +57,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 });
                 TGS_UnSafe.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
             }
-        }, e -> d.ce("call", e));
+        }, e -> d.ct("call", e));
     }
     public static List<String> SKIP_ERRORS_FOR_SERVLETNAMES = TGS_ListUtils.of();
 }
