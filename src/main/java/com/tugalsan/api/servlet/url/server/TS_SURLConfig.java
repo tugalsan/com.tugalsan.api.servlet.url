@@ -64,9 +64,9 @@ public class TS_SURLConfig implements Serializable {
         enableTimeout = (Boolean) prop.getOrDefault("enableTimeout", enableTimeout);
     }
 
-    public static TS_SURLConfig of(Path dir) {
+    public static TS_SURLConfig of(Path dir, String appName) {
         TS_DirectoryUtils.assureExists(dir);
-        var filePath = dir.resolve(TS_SURLConfig.class.getSimpleName() + ".json");
+        var filePath = dir.resolve(TS_SURLConfig.class.getSimpleName() + "." + appName + ".json");
         d.cr("of", filePath);
 
         if (!TS_FileUtils.isExistFile(filePath)) {
