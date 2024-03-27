@@ -19,6 +19,7 @@ public class TS_SURLWebServlet extends HttpServlet {
 
     final private static TS_Log d = TS_Log.of(TS_SURLWebServlet.class);
     public static volatile TS_ThreadSyncTrigger killTrigger = null;
+    public static volatile TS_SURLConfig config = TS_SURLConfig.of(false);
 
     @Override
     public void doGet(HttpServletRequest rq, HttpServletResponse rs) {
@@ -45,11 +46,15 @@ public class TS_SURLWebServlet extends HttpServlet {
             });
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
-                TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
-                    TGS_UnSafe.run(() -> {
-                        servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
-                    }, e -> d.ct("call", e));
-                });
+                if (config.enableTimeout) {
+                    TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
+                        TGS_UnSafe.run(() -> {
+                            servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                        }, e -> d.ct("call", e));
+                    });
+                } else {
+                    servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                }
                 return;
             }
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
