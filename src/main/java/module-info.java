@@ -12,6 +12,7 @@ module com.tugalsan.api.servlet.url {
     requires com.tugalsan.api.file;
     requires com.tugalsan.api.tuple;
     requires com.tugalsan.api.log;
+    requires com.tugalsan.api.union;
     requires com.tugalsan.api.coronator;
     requires com.tugalsan.api.stream;
     requires com.tugalsan.api.thread;

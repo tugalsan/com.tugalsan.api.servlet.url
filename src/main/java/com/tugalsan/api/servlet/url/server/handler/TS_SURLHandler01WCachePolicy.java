@@ -55,7 +55,11 @@ public class TS_SURLHandler01WCachePolicy {
             }
             var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
             rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
-            TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
+            var result = TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
+            if (result.isEmpty()) {
+                d.ct("download", result.throwable);
+                rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }, e -> {
             TGS_UnSafe.run(() -> {
                 d.ct("download", e);
