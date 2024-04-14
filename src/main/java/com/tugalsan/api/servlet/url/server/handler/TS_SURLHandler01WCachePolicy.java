@@ -4,7 +4,8 @@ import com.tugalsan.api.callable.client.TGS_CallableType1;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.runnable.client.TGS_RunnableType1;
 import com.tugalsan.api.stream.server.TS_StreamUtils;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -35,91 +36,120 @@ public class TS_SURLHandler01WCachePolicy {
         return new TS_SURLHandler01WCachePolicy(hs, rq, rs, noCache);
     }
 
-    public void download(TGS_CallableType1<Path, TS_SURLHandler02ForFileDownload> download) {
-        TGS_UnSafe.run(() -> {
+    public TGS_UnionExcuseVoid download(TGS_CallableType1<TGS_UnionExcuse<Path>, TS_SURLHandler02ForFileDownload> download) {
+        try {
             var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache);
-            var filePath = download.call(handler);
-            if (filePath == null) {
-                d.ce("download", "filePath == null");
-                rs.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
+            if (handler.isExcuse()) {
+                return handler.toExcuseVoid();
+            }
+            var u_filePath = download.call(handler.value());
+            if (u_filePath.isExcuse()) {
+                try {
+                    rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+                } catch (IOException ex) {
+                    return TGS_UnionExcuseVoid.ofExcuse(ex);
+                }
+                return u_filePath.toExcuseVoid();
             }
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            var mimeType = hs.getServletContext().getMimeType(filePath.toString());
+            var mimeType = hs.getServletContext().getMimeType(u_filePath.toString());
             rs.setContentType(mimeType == null ? "application/octet-stream" : mimeType);
-            var contentLength = filePath.toFile().length();
+            var contentLength = u_filePath.value().toFile().length();
             d.ci("run", "contentLength", contentLength);
             if (contentLength != -1) {
                 rs.setContentLengthLong(contentLength);
             }
-            var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
+            var encodedFileName = URLEncoder.encode(u_filePath.value().getFileName().toString(), "UTF-8").replace("+", "%20");
             rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
-            var result = TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
-            if (result.isEmpty()) {
-                d.ct("download", result.throwable);
-                rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+            var result = TS_StreamUtils.transfer(Files.newInputStream(u_filePath.value()), rs.getOutputStream());
+            if (result.isExcuse()) {
+                try {
+                    rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+                } catch (IOException ex) {
+                    return TGS_UnionExcuseVoid.ofExcuse(ex);
+                }
+                return result;
             }
-        }, e -> {
-            TGS_UnSafe.run(() -> {
-                d.ct("download", e);
+        } catch (IOException ex) {
+            try {
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
-            });
-        });
+            } catch (IOException ex1) {
+                return TGS_UnionExcuseVoid.ofExcuse(ex1);
+            }
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
+        }
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
     //see TS_FileImageUtils.formatNames. Example "png"
-    public void img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
-        TGS_UnSafe.run(() -> {
-            var handler = TS_SURLHandler02ForFileImg.of(hs, rq, rs, noCache, formatName);
-            var renderedImage = img.call(handler);
-            try (var os = handler.rs.getOutputStream()) {
-                ImageIO.write(renderedImage, formatName, os);
-            }
-        });
+    public TGS_UnionExcuseVoid img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
+        var handler = TS_SURLHandler02ForFileImg.of(hs, rq, rs, noCache, formatName);
+        if (handler.isExcuse()) {
+            return handler.toExcuseVoid();
+        }
+        var renderedImage = img.call(handler.value());
+        try (var os = handler.value().rs.getOutputStream()) {
+            ImageIO.write(renderedImage, formatName, os);
+        } catch (IOException ex) {
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
+        }
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
-    public void txt(TGS_RunnableType1<TS_SURLHandler02ForPlainText> txt) {
-        try {
-            try (var pw = rs.getWriter()) {
-                var handler = TS_SURLHandler02ForPlainText.of(hs, rq, rs, noCache, pw);
-                txt.run(handler);
-                pw.flush();
+    public TGS_UnionExcuseVoid txt(TGS_RunnableType1<TS_SURLHandler02ForPlainText> txt) {
+        try (var pw = rs.getWriter()) {
+            var handler = TS_SURLHandler02ForPlainText.of(hs, rq, rs, noCache, pw);
+            if (handler.isExcuse()) {
+                return handler.toExcuseVoid();
             }
+            txt.run(handler.value());
+            pw.flush();
+            return TGS_UnionExcuseVoid.ofVoid();
         } catch (IOException ex) {
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
         }
     }
 
-    public void css(TGS_RunnableType1<TS_SURLHandler02ForPlainCss> css) {
-        try {
-            try (var pw = rs.getWriter()) {
-                var handler = TS_SURLHandler02ForPlainCss.of(hs, rq, rs, noCache, pw);
-                css.run(handler);
-                pw.flush();
+    public TGS_UnionExcuseVoid css(TGS_RunnableType1<TS_SURLHandler02ForPlainCss> css) {
+        try (var pw = rs.getWriter()) {
+            var handler = TS_SURLHandler02ForPlainCss.of(hs, rq, rs, noCache, pw);
+            if (handler.isExcuse()) {
+                return handler.toExcuseVoid();
             }
+            css.run(handler.value());
+            pw.flush();
+            return TGS_UnionExcuseVoid.ofVoid();
         } catch (IOException ex) {
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
         }
     }
 
-    public void html(TGS_RunnableType1<TS_SURLHandler02ForPlainHtml> html) {
-        try {
-            try (var pw = rs.getWriter()) {
-                var handler = TS_SURLHandler02ForPlainHtml.of(hs, rq, rs, noCache, pw);
-                html.run(handler);
-                pw.flush();
+    public TGS_UnionExcuseVoid html(TGS_RunnableType1<TS_SURLHandler02ForPlainHtml> html) {
+        try (var pw = rs.getWriter()) {
+            var handler = TS_SURLHandler02ForPlainHtml.of(hs, rq, rs, noCache, pw);
+            if (handler.isExcuse()) {
+                return handler.toExcuseVoid();
             }
+            html.run(handler.value());
+            pw.flush();
+            return TGS_UnionExcuseVoid.ofVoid();
         } catch (IOException ex) {
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
         }
     }
 
-    public void js(TGS_RunnableType1<TS_SURLHandler02ForPlainJs> js) {
-        try {
-            try (var pw = rs.getWriter()) {
-                var handler = TS_SURLHandler02ForPlainJs.of(hs, rq, rs, noCache, pw);
-                js.run(handler);
-                pw.flush();
+    public TGS_UnionExcuseVoid js(TGS_RunnableType1<TS_SURLHandler02ForPlainJs> js) {
+        try (var pw = rs.getWriter()) {
+            var handler = TS_SURLHandler02ForPlainJs.of(hs, rq, rs, noCache, pw);
+            if (handler.isExcuse()) {
+                return handler.toExcuseVoid();
             }
+            js.run(handler.value());
+            pw.flush();
+            return TGS_UnionExcuseVoid.ofVoid();
         } catch (IOException ex) {
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
         }
     }
 }

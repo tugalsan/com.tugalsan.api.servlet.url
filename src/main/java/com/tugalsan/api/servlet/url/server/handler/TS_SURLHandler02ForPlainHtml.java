@@ -5,9 +5,10 @@ import com.tugalsan.api.file.html.client.TGS_FileHtmlText;
 import com.tugalsan.api.file.html.client.TGS_FileHtmlUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.string.client.TGS_StringUtils;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.client.TGS_Url;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -21,15 +22,24 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
 
     private TS_SURLHandler02ForPlainHtml(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
         super(hs, rq, rs, noCache, pw);
-        TGS_UnSafe.run(() -> {
+    }
+
+    protected static TGS_UnionExcuse<TS_SURLHandler02ForPlainHtml> of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
+        try {
+            var o = new TS_SURLHandler02ForPlainHtml(hs, rq, rs, noCache, pw);
+            if (o.u_clientIp.isExcuse()){
+                return o.u_clientIp.toExcuse();
+            }
+            if (o.u_servletName.isExcuse()){
+                return o.u_servletName.toExcuse();
+            }
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setContentType("text/html; charset=" + StandardCharsets.UTF_8.name());
-        });
-    }
-
-    protected static TS_SURLHandler02ForPlainHtml of(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
-        return new TS_SURLHandler02ForPlainHtml(hs, rq, rs, noCache, pw);
+            return TGS_UnionExcuse.of(o);
+        } catch (UnsupportedEncodingException ex) {
+            return TGS_UnionExcuse.ofExcuse(ex);
+        }
     }
 
     public void html_error_msg(CharSequence text) {
@@ -38,7 +48,7 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
     }
 
     public void html_error_msg(CharSequence text, CharSequence browserTitle, TGS_FileCommonFavIcon favIcon, TGS_Url bootLoaderJs) {
-        println(TGS_FileHtmlUtils.beginLines(browserTitle, false, 5, 5, favIcon, true, bootLoaderJs));
+        println(TGS_FileHtmlUtils.beginLines(browserTitle, false, 5, 5, favIcon, true, bootLoaderJs).orElse(excuse -> excuse.getMessage()));
         html_error_msg(text);
     }
 

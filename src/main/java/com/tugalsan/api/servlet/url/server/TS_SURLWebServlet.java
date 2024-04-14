@@ -8,10 +8,10 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.servlet.url.client.*;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
-import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-import com.tugalsan.api.unsafe.client.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import com.tugalsan.api.url.server.*;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
@@ -31,40 +31,36 @@ public class TS_SURLWebServlet extends HttpServlet {
         call(this, rq, rs);
     }
 
-    public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        TGS_UnSafe.run(() -> {
-            var servletName = TGS_Coronator.ofStr().coronateAs(val -> {
-                var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
-                if (TGS_StringUtils.isNullOrEmpty(tmp)) {
-                    tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
-                }
-                if (TGS_StringUtils.isNullOrEmpty(tmp)) {
-                    TGS_UnSafe.thrw(d.className, "call", "servletName is empty");
-                    return null;
-                }
-                return tmp;
-            });
-            var servletPack = TS_SURLExecutorList.get(servletName);
-            if (servletPack != null) {
-                if (config.enableTimeout) {
-                    TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
-                        TGS_UnSafe.run(() -> {
-                            servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
-                        }, e -> d.ct("call", e));
-                    });
-                } else {
-                    servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
-                }
-                return;
+    public static TGS_UnionExcuseVoid call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
+        TGS_UnionExcuse<String> u_servletName = TGS_Coronator.of(TGS_UnionExcuse.class).coronateAs(val -> {
+            var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
+            if (tmp.isExcuse()) {
+                tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
             }
-            if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
-                TS_SURLHandler.of(servlet, rq, rs).txt(text -> text.pw.close());
-                TS_SURLExecutorList.SYNC.forEach(item -> {
-                    d.ce("call", "-", item.value0);
+            return tmp;
+        });
+        if (u_servletName.isExcuse()) {
+            return u_servletName.toExcuseVoid();
+        }
+        var servletPack = TS_SURLExecutorList.get(u_servletName.value());
+        if (servletPack != null) {
+            if (config.enableTimeout) {
+                TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.executor().timeout(), exe -> {
+                    servletPack.executor().run(TS_SURLHandler.of(servlet, rq, rs));
                 });
-                TGS_UnSafe.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
+            } else {
+                servletPack.executor().run(TS_SURLHandler.of(servlet, rq, rs));
             }
-        }, e -> d.ct("call", e));
+            return TGS_UnionExcuseVoid.ofVoid();
+        }
+        TS_SURLHandler.of(servlet, rq, rs).txt(text -> text.pw.close());
+        if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, u_servletName.value())).findAny().isPresent()) {
+            return TGS_UnionExcuseVoid.ofVoid();
+        }
+        TS_SURLExecutorList.SYNC.forEach(item -> {
+            d.ce("call", "-", item.name());
+        });
+        return TGS_UnionExcuseVoid.ofExcuse(d.className, "call", "servletName not identified: [" + u_servletName.value() + "]");
     }
     public static List<String> SKIP_ERRORS_FOR_SERVLETNAMES = TGS_ListUtils.of();
 }

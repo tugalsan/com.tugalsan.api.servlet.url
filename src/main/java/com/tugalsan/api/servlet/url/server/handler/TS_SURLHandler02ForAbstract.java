@@ -5,7 +5,7 @@ import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
 import com.tugalsan.api.string.client.TGS_StringUtils;
 import com.tugalsan.api.time.client.TGS_Time;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlQueryUtils;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
@@ -31,11 +31,11 @@ public class TS_SURLHandler02ForAbstract {
         }
         //CREATE
         context = hs.getServletContext();
-        clientIp = TS_NetworkIPUtils.getIPClient(rq);
+        u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         url = TS_UrlUtils.toUrl(rq);
-        servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
-        if (TGS_StringUtils.isNullOrEmpty(servletName)) {
-            servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
+        u_servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
+        if (u_servletName.isExcuse()) {
+            u_servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
         }
     }
     public HttpServlet hs;
@@ -43,116 +43,102 @@ public class TS_SURLHandler02ForAbstract {
     public HttpServletResponse rs;
     public boolean noCache;
     public ServletContext context;
-    public String clientIp, servletName;
+    public TGS_UnionExcuse<String> u_clientIp;
+    public TGS_UnionExcuse<String> u_servletName;
     public TGS_Url url;
 
     //GET PARAMETER-----------------------------------------------------------------------------------------
-    public String getParameterFromUrlSafe64(CharSequence paramName) {
-        return TGS_StringUtils.toNullIfEmpty(TGS_UrlQueryUtils.param64UrlSafe_2_readable(getParameter(paramName, false)));
-    }
-
-    @Deprecated
-    public String getParameter(CharSequence paramName, boolean assure) {
-        var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
-        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
-            if (assure) {
-                throwError(TGS_StringUtils.concat("Parameter ", paramName, " is null"));
-            }
-            return null;
+    public TGS_UnionExcuse<String> getParameterFromUrlSafe64(CharSequence paramName) {
+        var paramValue = getParameter(paramName);
+        if (paramValue.isExcuse()) {
+            return paramValue.toExcuse();
         }
-//        d.ce("getParameter", "url/param/result", url, paramName, paramValue);
-        return paramValue;
+        return TGS_UrlQueryUtils.param64UrlSafe_2_readable(paramValue.value());
     }
 
     @Deprecated
-    public String getParameter(CharSequence paramName, CharSequence[] assureChoices) {
-        var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
+    public TGS_UnionExcuse<String> getParameter(CharSequence paramName) {
         if (TGS_StringUtils.isNullOrEmpty(paramName)) {
-            throwError(TGS_StringUtils.concat("Parameter ", paramName, " is null"));
+            return TGS_UnionExcuse.ofExcuse(d.className, "getParameter", "TGS_StringUtils.isNullOrEmpty(paramName)");
+        }
+        return TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
+    }
+
+    @Deprecated
+    public TGS_UnionExcuse<String> getParameter(CharSequence paramName, CharSequence[] assureChoices) {
+        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
+            return TGS_UnionExcuse.ofExcuse(d.className, "getParameter", "TGS_StringUtils.isNullOrEmpty(paramName)");
+        }
+        var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
+        if (paramValue.isExcuse()) {
+            return paramValue;
         }
         for (var s : assureChoices) {
-            if (s.toString().equals(paramValue)) {
+            if (s.toString().equals(paramValue.value())) {
                 return paramValue;
             }
         }
-        throwError(TGS_StringUtils.concat("Parameter ", paramName, " is not in the list of assureChoices: ", Arrays.toString(assureChoices)));
-        return null;
+        return TGS_UnionExcuse.ofExcuse(d.className, "getParameter", "Parameter " + paramName + " is not in the list of assureChoices: " + Arrays.toString(assureChoices));
     }
 
     @Deprecated
-    public Boolean getParameterBoolean(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
-            var paramValue = getParameter(paramName, new String[]{"true", "false"});
-            if (paramValue == null) {
-                return null;
-            }
-            return Boolean.valueOf(paramValue);
-        }, e -> {
-            if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
-            }
-            return null;
-        });
+    public TGS_UnionExcuse<Boolean> getParameterBoolean(CharSequence paramName, boolean assure) {
+        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
+            return TGS_UnionExcuse.ofExcuse(d.className, "getParameterBoolean", "TGS_StringUtils.isNullOrEmpty(paramName)");
+        }
+        var paramValue = getParameter(paramName, new String[]{"true", "false"});
+        if (paramValue.isExcuse()) {
+            return paramValue.toExcuse();
+        }
+        return TGS_UnionExcuse.of(Boolean.valueOf(paramValue.value()));
     }
 
     @Deprecated
-    public Integer getParameterInteger(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
-            var paramValue = getParameter(paramName, assure);
-            if (paramValue == null) {
-                return null;
-            }
-            return Integer.valueOf(paramValue);
-        }, e -> {
-            if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
-            }
-            return null;
-        });
+    public TGS_UnionExcuse<Integer> getParameterInteger(CharSequence paramName, boolean assure) {
+        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
+            return TGS_UnionExcuse.ofExcuse(d.className, "getParameterInteger", "TGS_StringUtils.isNullOrEmpty(paramName)");
+        }
+        var paramValue = getParameter(paramName);
+        if (paramValue.isExcuse()) {
+            return paramValue.toExcuse();
+        }
+        return TGS_UnionExcuse.of(Integer.valueOf(paramValue.value()));
     }
 
     @Deprecated
-    public Long getParameterLong(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
-            var paramValue = getParameter(paramName, assure);
-            if (paramValue == null) {
-                return null;
-            }
-            return Long.valueOf(paramValue);
-        }, e -> {
-            if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
-            }
-            return null;
-        });
+    public TGS_UnionExcuse<Long> getParameterLong(CharSequence paramName, boolean assure) {
+        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
+            return TGS_UnionExcuse.ofExcuse(d.className, "getParameterLong", "TGS_StringUtils.isNullOrEmpty(paramName)");
+        }
+        var paramValue = getParameter(paramName);
+        if (paramValue.isExcuse()) {
+            return paramValue.toExcuse();
+        }
+        return TGS_UnionExcuse.of(Long.valueOf(paramValue.value()));
     }
 
     @Deprecated
-    public TGS_Time getParameterDate(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
-            var paramValue = getParameterLong(paramName, assure);
-            if (paramValue == null) {
-                return null;
-            }
-            return TGS_Time.ofDate(paramValue);
-        }, e -> {
-            if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
-            }
-            return null;
-        });
+    public TGS_UnionExcuse<TGS_Time> getParameterDate(CharSequence paramName) {
+        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
+            return TGS_UnionExcuse.ofExcuse(d.className, "getParameterDate", "TGS_StringUtils.isNullOrEmpty(paramName)");
+        }
+        var paramValue = getParameter(paramName);
+        if (paramValue.isExcuse()) {
+            return paramValue.toExcuse();
+        }
+        return TGS_Time.ofDate(paramValue.value());
     }
 
-    //ERROR-HANDLER---------------------------------------------------------------
-    final public void throwError(String text) {
-        TGS_UnSafe.thrw(d.className, "throwError(String text)", text);
-    }
-
-    final public void throwError(Throwable t) {
-        TGS_UnSafe.thrw(t);
-    }
-
-    final public void throwError(CharSequence className, CharSequence funcName, Object errorContent) {
-        TGS_UnSafe.thrw(className, funcName, errorContent);
-    }
+//    //ERROR-HANDLER---------------------------------------------------------------
+//    final public void throwError(String text) {
+//        TGS_UnSafe.thrw(d.className, "throwError(String text)", text);
+//    }
+//
+//    final public void throwError(Throwable t) {
+//        TGS_UnSafe.thrw(t);
+//    }
+//
+//    final public void throwError(CharSequence className, CharSequence funcName, Object errorContent) {
+//        TGS_UnSafe.thrw(className, funcName, errorContent);
+//    }
 }
