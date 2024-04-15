@@ -65,7 +65,7 @@ public class TS_SURLHandler02ForAbstract {
     }
 
     @Deprecated
-    public TGS_UnionExcuse<String> getParameter(CharSequence paramName, CharSequence[] assureChoices) {
+    public TGS_UnionExcuse<String> getParameter(CharSequence paramName, CharSequence[] choices) {
         if (TGS_StringUtils.isNullOrEmpty(paramName)) {
             return TGS_UnionExcuse.ofExcuse(d.className, "getParameter", "TGS_StringUtils.isNullOrEmpty(paramName)");
         }
@@ -73,16 +73,16 @@ public class TS_SURLHandler02ForAbstract {
         if (paramValue.isExcuse()) {
             return paramValue;
         }
-        for (var s : assureChoices) {
+        for (var s : choices) {
             if (s.toString().equals(paramValue.value())) {
                 return paramValue;
             }
         }
-        return TGS_UnionExcuse.ofExcuse(d.className, "getParameter", "Parameter " + paramName + " is not in the list of assureChoices: " + Arrays.toString(assureChoices));
+        return TGS_UnionExcuse.ofExcuse(d.className, "getParameter", "Parameter " + paramName + " is not in the list of choices: " + Arrays.toString(choices));
     }
 
     @Deprecated
-    public TGS_UnionExcuse<Boolean> getParameterBoolean(CharSequence paramName, boolean assure) {
+    public TGS_UnionExcuse<Boolean> getParameterBoolean(CharSequence paramName) {
         if (TGS_StringUtils.isNullOrEmpty(paramName)) {
             return TGS_UnionExcuse.ofExcuse(d.className, "getParameterBoolean", "TGS_StringUtils.isNullOrEmpty(paramName)");
         }
@@ -94,7 +94,7 @@ public class TS_SURLHandler02ForAbstract {
     }
 
     @Deprecated
-    public TGS_UnionExcuse<Integer> getParameterInteger(CharSequence paramName, boolean assure) {
+    public TGS_UnionExcuse<Integer> getParameterInteger(CharSequence paramName) {
         if (TGS_StringUtils.isNullOrEmpty(paramName)) {
             return TGS_UnionExcuse.ofExcuse(d.className, "getParameterInteger", "TGS_StringUtils.isNullOrEmpty(paramName)");
         }
@@ -106,7 +106,7 @@ public class TS_SURLHandler02ForAbstract {
     }
 
     @Deprecated
-    public TGS_UnionExcuse<Long> getParameterLong(CharSequence paramName, boolean assure) {
+    public TGS_UnionExcuse<Long> getParameterLong(CharSequence paramName) {
         if (TGS_StringUtils.isNullOrEmpty(paramName)) {
             return TGS_UnionExcuse.ofExcuse(d.className, "getParameterLong", "TGS_StringUtils.isNullOrEmpty(paramName)");
         }
