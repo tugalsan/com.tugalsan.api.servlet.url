@@ -89,7 +89,7 @@ public class TS_SURLHandler02ForAbstract {
             return Boolean.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
+                return TGS_UnSafe.thrw(e);
             }
             return null;
         });
@@ -105,7 +105,7 @@ public class TS_SURLHandler02ForAbstract {
             return Integer.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
+                return TGS_UnSafe.thrw(e);
             }
             return null;
         });
@@ -121,7 +121,7 @@ public class TS_SURLHandler02ForAbstract {
             return Long.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
+                return TGS_UnSafe.thrw(e);
             }
             return null;
         });
@@ -137,7 +137,7 @@ public class TS_SURLHandler02ForAbstract {
             return TGS_Time.ofDate(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrwReturns(e);
+                return TGS_UnSafe.thrw(e);
             }
             return null;
         });
