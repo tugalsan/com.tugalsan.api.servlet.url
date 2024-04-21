@@ -13,7 +13,7 @@ import java.util.Properties;
 public class TS_SURLConfig implements Serializable {
 
     final private static TS_Log d = TS_Log.of(TS_SURLConfig.class);
-    final private static boolean DEFAULT_ENABLE_TIMEOUT = false;
+    final private static boolean DEFAULT_ENABLE_TIMEOUT = true;
 
     private TS_SURLConfig(){//DTO
     }
