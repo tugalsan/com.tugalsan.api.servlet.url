@@ -17,9 +17,9 @@ import com.tugalsan.api.url.server.*;
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 public class TS_SURLWebServlet extends HttpServlet {
 
-    final private static TS_Log d = TS_Log.of(TS_SURLWebServlet.class);
+    final private static TS_Log d = TS_Log.of(true, TS_SURLWebServlet.class);
     public static volatile TS_ThreadSyncTrigger killTrigger = null;
-    public static volatile TS_SURLConfig config = TS_SURLConfig.of(false);
+    public static volatile TS_SURLConfig config = TS_SURLConfig.of();
 
     @Override
     public void doGet(HttpServletRequest rq, HttpServletResponse rs) {
@@ -46,15 +46,28 @@ public class TS_SURLWebServlet extends HttpServlet {
             });
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
+                var handler = TS_SURLHandler.of(servlet, rq, rs);
                 if (config.enableTimeout) {
-                    TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
+                    var await = TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
                         TGS_UnSafe.run(() -> {
-                            servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
-                        }, e -> d.ct("call", e));
+                            servletPack.value1.run(handler);
+                        }, e -> d.ct("call.await", e));
                     });
+                    if (await.timeout()) {
+                        var errMsg = "ERROR(AWAIT) timeout";
+                        d.ce("call", servletName, errMsg);
+                        return;
+                    }
+                    if (await.hasError()) {
+                        d.ce("call", servletName, "ERROR(AWAIT)", await.exceptionIfFailed.get().getMessage());
+                        return;
+                    }
                 } else {
-                    servletPack.value1.run(TS_SURLHandler.of(servlet, rq, rs));
+                    TGS_UnSafe.run(() -> {
+                        servletPack.value1.run(handler);
+                    }, e -> d.ct("call", e));
                 }
+                d.ci("call", "executed", "config.enableTimeout", config.enableTimeout, servletName);
                 return;
             }
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
