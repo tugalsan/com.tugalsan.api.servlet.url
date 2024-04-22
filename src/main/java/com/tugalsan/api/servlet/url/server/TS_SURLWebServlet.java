@@ -17,7 +17,7 @@ import com.tugalsan.api.url.server.*;
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 public class TS_SURLWebServlet extends HttpServlet {
 
-    final private static TS_Log d = TS_Log.of(true, TS_SURLWebServlet.class);
+    final private static TS_Log d = TS_Log.of(false, TS_SURLWebServlet.class);
     public static volatile TS_ThreadSyncTrigger killTrigger = null;
     public static volatile TS_SURLConfig config = TS_SURLConfig.of();
 
