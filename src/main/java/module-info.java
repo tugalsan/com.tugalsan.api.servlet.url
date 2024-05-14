@@ -2,6 +2,7 @@ module com.tugalsan.api.servlet.url {
     requires javax.servlet.api;
     requires java.desktop;
     requires com.tugalsan.api.url;
+    requires com.tugalsan.api.union;
     requires com.tugalsan.api.validator;
     requires com.tugalsan.api.callable;
     requires com.tugalsan.api.unsafe;

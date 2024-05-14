@@ -22,8 +22,6 @@ public class TS_SURLHandler02ForFileDownload extends TS_SURLHandler02ForAbstract
         TGS_UnSafe.run(() -> {
             d.ce("throwFileNotFound", msg);
             rs.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }, e -> {
-            e.printStackTrace();
-        });
+        }, e -> d.ct("throwFileNotFound", e));
     }
 }

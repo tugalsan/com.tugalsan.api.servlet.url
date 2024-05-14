@@ -5,6 +5,7 @@ import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
 import com.tugalsan.api.string.client.TGS_StringUtils;
 import com.tugalsan.api.time.client.TGS_Time;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlQueryUtils;
@@ -43,7 +44,8 @@ public class TS_SURLHandler02ForAbstract {
     public HttpServletResponse rs;
     public boolean noCache;
     public ServletContext context;
-    public String clientIp, servletName;
+    public String servletName;
+    public TGS_UnionExcuse<String> clientIp;
     public TGS_Url url;
 
     //GET PARAMETER-----------------------------------------------------------------------------------------
