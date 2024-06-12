@@ -17,15 +17,16 @@ import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 @MultipartConfig(//for TS_LibFileUploadUtils.upload that uses Apache.commons
-
-        fileSizeThreshold = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT, //25MB
-        maxFileSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT, //25MB
-        maxRequestSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT, //25MB
-        location = "/" + TGS_SURLUtils.LOC_NAME//means C:/bin/tomcat/home/work/Catalina/localhost/spi-table/u (do create it)
+        fileSizeThreshold = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_MEMORY,
+        maxFileSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_FILE,
+        maxRequestSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_REQUESTBALL,
+        location = "/" + TGS_SURLUtils.LOC_NAME//means C:/bin/tomcat/home/work/Catalina/localhost/spi-xxx/u (do create it)
 )
 public class TS_SURLWebServlet extends HttpServlet {
 
-    final public static int UPLOAD_MB_LIMIT = 25;
+    final public static int UPLOAD_MB_LIMIT_MEMORY = 10;
+    final public static int UPLOAD_MB_LIMIT_FILE = 25;
+    final public static int UPLOAD_MB_LIMIT_REQUESTBALL = 50;
     final private static TS_Log d = TS_Log.of(false, TS_SURLWebServlet.class);
     public static volatile TS_ThreadSyncTrigger killTrigger = null;
     public static volatile TS_SURLConfig config = TS_SURLConfig.of();
