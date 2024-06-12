@@ -2,7 +2,6 @@ package com.tugalsan.api.servlet.url.server;
 
 import com.tugalsan.api.coronator.client.*;
 import java.util.*;
-import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.list.client.*;
@@ -13,8 +12,16 @@ import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.server.*;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
+@MultipartConfig(//for TS_LibFileUploadUtils.upload that uses Apache.commons
+        fileSizeThreshold = 1048576,
+        maxFileSize = 20848820,
+        maxRequestSize = 418018841,
+        location = "/" + TGS_SURLUtils.LOC_NAME
+)
 public class TS_SURLWebServlet extends HttpServlet {
 
     final private static TS_Log d = TS_Log.of(false, TS_SURLWebServlet.class);

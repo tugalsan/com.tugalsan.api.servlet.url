@@ -64,9 +64,9 @@ public class TS_SURLHandler01WCachePolicy {
                 d.ct("download", e_download);
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
             }, e_sendError -> {
-                d.ce("download", "filePath", filePathHolder.value0);
-                d.ce("download", "e_download", e_download.getMessage());
-                d.ce("download", "e_sendError", e_sendError.getMessage());
+                d.ce("download", "info", "filePath", filePathHolder.value0);
+                d.ce("download", "info", "e_download", e_download.getMessage());
+                d.ce("download", "info", "e_sendError", e_sendError.getMessage());
             });
         });
     }
