@@ -22,6 +22,17 @@ import javax.servlet.annotation.WebServlet;
         maxRequestSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_REQUESTBALL,
         location = "/" + TGS_SURLUtils.LOC_NAME//means C:/bin/tomcat/home/work/Catalina/localhost/spi-xxx/u (do create it)
 )
+/*
+String appPath = request.getServletContext().getRealPath("");
+// constructs path of the directory to save uploaded file
+String savePath = appPath + File.separator + SAVE_DIR;
+
+// creates the save directory if it does not exists
+File fileSaveDir = new File(savePath);
+if (!fileSaveDir.exists()) {
+        fileSaveDir.mkdir();
+}
+ */
 public class TS_SURLWebServlet extends HttpServlet {
 
     final public static int UPLOAD_MB_LIMIT_MEMORY = 10;
