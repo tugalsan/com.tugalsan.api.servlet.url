@@ -20,7 +20,7 @@ import javax.servlet.annotation.WebServlet;
         fileSizeThreshold = 1048576,
         maxFileSize = 20848820,
         maxRequestSize = 418018841,
-        location = "/" + TGS_SURLUtils.LOC_NAME
+        location = "/" + TGS_SURLUtils.LOC_NAME//means C:/bin/tomcat/home/work/Catalina/localhost/spi-table/u (do create it)
 )
 public class TS_SURLWebServlet extends HttpServlet {
 
