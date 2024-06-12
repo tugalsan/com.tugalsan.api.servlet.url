@@ -12,32 +12,11 @@ import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.server.*;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
-@MultipartConfig(//for TS_LibFileUploadUtils.upload that uses Apache.commons
-        fileSizeThreshold = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_MEMORY,
-        maxFileSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_FILE,
-        maxRequestSize = 1024 * 1024 * TS_SURLWebServlet.UPLOAD_MB_LIMIT_REQUESTBALL,
-        location = "/" + TGS_SURLUtils.LOC_NAME//means C:/bin/tomcat/home/work/Catalina/localhost/spi-xxx/u (do create it)
-)
-/*
-String appPath = request.getServletContext().getRealPath("");
-// constructs path of the directory to save uploaded file
-String savePath = appPath + File.separator + SAVE_DIR;
-
-// creates the save directory if it does not exists
-File fileSaveDir = new File(savePath);
-if (!fileSaveDir.exists()) {
-        fileSaveDir.mkdir();
-}
- */
 public class TS_SURLWebServlet extends HttpServlet {
 
-    final public static int UPLOAD_MB_LIMIT_MEMORY = 10;
-    final public static int UPLOAD_MB_LIMIT_FILE = 25;
-    final public static int UPLOAD_MB_LIMIT_REQUESTBALL = 50;
     final private static TS_Log d = TS_Log.of(false, TS_SURLWebServlet.class);
     public static volatile TS_ThreadSyncTrigger killTrigger = null;
     public static volatile TS_SURLConfig config = TS_SURLConfig.of();
