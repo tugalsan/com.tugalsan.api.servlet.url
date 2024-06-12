@@ -4,6 +4,7 @@ import com.tugalsan.api.callable.client.TGS_CallableType1;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.runnable.client.TGS_RunnableType1;
 import com.tugalsan.api.stream.server.TS_StreamUtils;
+import com.tugalsan.api.tuple.client.TGS_Tuple1;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
@@ -36,9 +37,11 @@ public class TS_SURLHandler01WCachePolicy {
     }
 
     public void download(TGS_CallableType1<Path, TS_SURLHandler02ForFileDownload> download) {
+        TGS_Tuple1<Path> filePathHolder = TGS_Tuple1.of();
         TGS_UnSafe.run(() -> {
             var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache);
-            var filePath = download.call(handler);
+            filePathHolder.value0 = download.call(handler);
+            var filePath = filePathHolder.value0;
             if (filePath == null) {
                 d.ce("download", "filePath == null");
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -56,10 +59,14 @@ public class TS_SURLHandler01WCachePolicy {
             var encodedFileName = URLEncoder.encode(filePath.getFileName().toString(), "UTF-8").replace("+", "%20");
             rs.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", encodedFileName));
             TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
-        }, e -> {
+        }, e_download -> {
             TGS_UnSafe.run(() -> {
-                d.ct("download", e);
+                d.ct("download", e_download);
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }, e_sendError -> {
+                d.ce("download", "filePath", filePathHolder.value0);
+                d.ce("download", "e_download", e_download.getMessage());
+                d.ce("download", "e_sendError", e_sendError.getMessage());
             });
         });
     }
