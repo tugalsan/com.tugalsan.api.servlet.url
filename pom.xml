@@ -53,11 +53,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>com.tugalsan.api.validator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>com.tugalsan.api.list</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -69,11 +64,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>com.tugalsan.api.servlet.charset.deprecated</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>com.tugalsan.api.coronator</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

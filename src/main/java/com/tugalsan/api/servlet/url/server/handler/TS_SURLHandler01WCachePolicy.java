@@ -1,7 +1,7 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
 import com.tugalsan.api.callable.client.TGS_CallableType1;
-import com.tugalsan.api.callable.client.TGS_CallableType1Void;
+import com.tugalsan.api.callable.client.TGS_CallableType1_Run;
 import com.tugalsan.api.log.server.TS_Log;
 
 import com.tugalsan.api.stream.server.TS_StreamUtils;
@@ -83,7 +83,7 @@ public class TS_SURLHandler01WCachePolicy {
         });
     }
 
-    public void txt(TGS_CallableType1Void<TS_SURLHandler02ForPlainText> txt) {
+    public void txt(TGS_CallableType1_Run<TS_SURLHandler02ForPlainText> txt) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainText.of(hs, rq, rs, noCache, pw);
@@ -94,7 +94,7 @@ public class TS_SURLHandler01WCachePolicy {
         }
     }
 
-    public void css(TGS_CallableType1Void<TS_SURLHandler02ForPlainCss> css) {
+    public void css(TGS_CallableType1_Run<TS_SURLHandler02ForPlainCss> css) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainCss.of(hs, rq, rs, noCache, pw);
@@ -105,7 +105,7 @@ public class TS_SURLHandler01WCachePolicy {
         }
     }
 
-    public void html(TGS_CallableType1Void<TS_SURLHandler02ForPlainHtml> html) {
+    public void html(TGS_CallableType1_Run<TS_SURLHandler02ForPlainHtml> html) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainHtml.of(hs, rq, rs, noCache, pw);
@@ -116,7 +116,7 @@ public class TS_SURLHandler01WCachePolicy {
         }
     }
 
-    public void js(TGS_CallableType1Void<TS_SURLHandler02ForPlainJs> js) {
+    public void js(TGS_CallableType1_Run<TS_SURLHandler02ForPlainJs> js) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainJs.of(hs, rq, rs, noCache, pw);

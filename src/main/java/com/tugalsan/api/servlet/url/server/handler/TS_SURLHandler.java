@@ -2,7 +2,7 @@ package com.tugalsan.api.servlet.url.server.handler;
 
 //AutoClosable Version of Helper
 import com.tugalsan.api.callable.client.TGS_CallableType1;
-import com.tugalsan.api.callable.client.TGS_CallableType1Void;
+import com.tugalsan.api.callable.client.TGS_CallableType1_Run;
 
 import java.awt.image.RenderedImage;
 import java.nio.file.Path;
@@ -40,19 +40,19 @@ public class TS_SURLHandler {
         permitNoCache().img(formatName, img);
     }
     
-    public void txt(TGS_CallableType1Void<TS_SURLHandler02ForPlainText> txt) {
+    public void txt(TGS_CallableType1_Run<TS_SURLHandler02ForPlainText> txt) {
         permitNoCache().txt(txt);
     }
     
-    public void css(TGS_CallableType1Void<TS_SURLHandler02ForPlainCss> css) {
+    public void css(TGS_CallableType1_Run<TS_SURLHandler02ForPlainCss> css) {
         permitNoCache().css(css);
     }
     
-    public void html(TGS_CallableType1Void<TS_SURLHandler02ForPlainHtml> html) {
+    public void html(TGS_CallableType1_Run<TS_SURLHandler02ForPlainHtml> html) {
         permitNoCache().html(html);
     }
     
-    public void js(TGS_CallableType1Void<TS_SURLHandler02ForPlainJs> js) {
+    public void js(TGS_CallableType1_Run<TS_SURLHandler02ForPlainJs> js) {
         permitNoCache().js(js);
     }
 }
