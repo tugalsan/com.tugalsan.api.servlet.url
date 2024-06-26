@@ -43,19 +43,19 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
     }
 
     public void addHTML_HeaderBR(CharSequence text) {
-        println(TGS_StringUtils.concat("<h3>", text, "</h3><br/>"));
+        println(TGS_StringUtils.cmn().concat("<h3>", text, "</h3><br/>"));
     }
 
     public void addHTML_HeaderBR(TGS_FileHtmlText text) {
-        println(TGS_StringUtils.concat("<h3>", text.toString(), "</h3><br/>"));
+        println(TGS_StringUtils.cmn().concat("<h3>", text.toString(), "</h3><br/>"));
     }
 
     public void addHTML_P(String text) {
-        println(TGS_StringUtils.concat("<p>", text, "</p>"));
+        println(TGS_StringUtils.cmn().concat("<p>", text, "</p>"));
     }
 
     public void addHTML_P(TGS_FileHtmlText text) {
-        println(TGS_StringUtils.concat("<p>", text.toString(), "</p>"));
+        println(TGS_StringUtils.cmn().concat("<p>", text.toString(), "</p>"));
     }
 
     public void addHTML_TextBR(List<String> texts) {
@@ -76,8 +76,8 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
 
     public void addHTML_ImgBR(TGS_Url source, Integer width, Integer height) {
         println("<img src=\"" + source + "\""
-                + (width == null ? "" : TGS_StringUtils.concat(" width=\"", String.valueOf(width), "\""))
-                + (height == null ? "" : TGS_StringUtils.concat(" height=\"", String.valueOf(height), "\""))
+                + (width == null ? "" : TGS_StringUtils.cmn().concat(" width=\"", String.valueOf(width), "\""))
+                + (height == null ? "" : TGS_StringUtils.cmn().concat(" height=\"", String.valueOf(height), "\""))
                 + "/><br/>"
         );
     }
@@ -98,12 +98,12 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
     }
 
     public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
-        var html = TGS_StringUtils.concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
+        var html = TGS_StringUtils.cmn().concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
         d.ci("addHTML_LinkBR", html);
         println(html);
     }
 
     public void addHTML_Hidden(CharSequence label, CharSequence value) {
-        println(TGS_StringUtils.concat("<input id=\"", label, "\" name=\"", label, "\" type=\"hidden\" value=\"", value, "\">"));
+        println(TGS_StringUtils.cmn().concat("<input id=\"", label, "\" name=\"", label, "\" type=\"hidden\" value=\"", value, "\">"));
     }
 }

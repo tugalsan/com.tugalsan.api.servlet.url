@@ -35,7 +35,7 @@ public class TS_SURLHandler02ForAbstract {
         clientIp = TS_NetworkIPUtils.getIPClient(rq);
         url = TS_UrlUtils.toUrl(rq);
         servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
-        if (TGS_StringUtils.isNullOrEmpty(servletName)) {
+        if (TGS_StringUtils.cmn().isNullOrEmpty(servletName)) {
             servletName = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
         }
     }
@@ -50,15 +50,15 @@ public class TS_SURLHandler02ForAbstract {
 
     //GET PARAMETER-----------------------------------------------------------------------------------------
     public String getParameterFromUrlSafe64(CharSequence paramName) {
-        return TGS_StringUtils.toNullIfEmpty(TGS_UrlQueryUtils.param64UrlSafe_2_readable(getParameter(paramName, false)));
+        return TGS_StringUtils.cmn().toNullIfEmpty(TGS_UrlQueryUtils.param64UrlSafe_2_readable(getParameter(paramName, false)));
     }
 
     @Deprecated
     public String getParameter(CharSequence paramName, boolean assure) {
         var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
-        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
+        if (TGS_StringUtils.cmn().isNullOrEmpty(paramName)) {
             if (assure) {
-                throwError(TGS_StringUtils.concat("Parameter ", paramName, " is null"));
+                throwError(TGS_StringUtils.cmn().concat("Parameter ", paramName, " is null"));
             }
             return null;
         }
@@ -69,15 +69,15 @@ public class TS_SURLHandler02ForAbstract {
     @Deprecated
     public String getParameter(CharSequence paramName, CharSequence[] assureChoices) {
         var paramValue = TS_UrlServletRequestUtils.getParameterValue(rq, paramName, true);
-        if (TGS_StringUtils.isNullOrEmpty(paramName)) {
-            throwError(TGS_StringUtils.concat("Parameter ", paramName, " is null"));
+        if (TGS_StringUtils.cmn().isNullOrEmpty(paramName)) {
+            throwError(TGS_StringUtils.cmn().concat("Parameter ", paramName, " is null"));
         }
         for (var s : assureChoices) {
             if (s.toString().equals(paramValue)) {
                 return paramValue;
             }
         }
-        throwError(TGS_StringUtils.concat("Parameter ", paramName, " is not in the list of assureChoices: ", Arrays.toString(assureChoices)));
+        throwError(TGS_StringUtils.cmn().concat("Parameter ", paramName, " is not in the list of assureChoices: ", Arrays.toString(assureChoices)));
         return null;
     }
 

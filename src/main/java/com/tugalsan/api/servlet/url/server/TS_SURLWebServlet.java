@@ -35,10 +35,10 @@ public class TS_SURLWebServlet extends HttpServlet {
         TGS_UnSafe.run(() -> {
             var servletName = TGS_CallableType1_Coronator.ofStr().coronateAs(val -> {
                 var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
-                if (TGS_StringUtils.isNullOrEmpty(tmp)) {
+                if (TGS_StringUtils.cmn().isNullOrEmpty(tmp)) {
                     tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
                 }
-                if (TGS_StringUtils.isNullOrEmpty(tmp)) {
+                if (TGS_StringUtils.cmn().isNullOrEmpty(tmp)) {
                     TGS_UnSafe.thrw(d.className, "call", "servletName is empty");
                     return null;
                 }
