@@ -1,7 +1,7 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.callable.client.TGS_CallableType1;
-import com.tugalsan.api.callable.client.TGS_CallableType1_Run;
+import com.tugalsan.api.function.client.TGS_Func_OutTyped_In1;
+import com.tugalsan.api.function.client.TGS_Func_In1;
 import com.tugalsan.api.log.server.TS_Log;
 
 import com.tugalsan.api.stream.server.TS_StreamUtils;
@@ -37,7 +37,7 @@ public class TS_SURLHandler01WCachePolicy {
         return new TS_SURLHandler01WCachePolicy(hs, rq, rs, noCache);
     }
 
-    public void download(TGS_CallableType1<Path, TS_SURLHandler02ForFileDownload> download) {
+    public void download(TGS_Func_OutTyped_In1<Path, TS_SURLHandler02ForFileDownload> download) {
         TGS_Tuple1<Path> filePathHolder = TGS_Tuple1.of();
         TGS_UnSafe.run(() -> {
             var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache);
@@ -73,7 +73,7 @@ public class TS_SURLHandler01WCachePolicy {
     }
 
     //see TS_FileImageUtils.formatNames. Example "png"
-    public void img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
+    public void img(String formatName, TGS_Func_OutTyped_In1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
         TGS_UnSafe.run(() -> {
             var handler = TS_SURLHandler02ForFileImg.of(hs, rq, rs, noCache, formatName);
             var renderedImage = img.call(handler);
@@ -83,7 +83,7 @@ public class TS_SURLHandler01WCachePolicy {
         });
     }
 
-    public void txt(TGS_CallableType1_Run<TS_SURLHandler02ForPlainText> txt) {
+    public void txt(TGS_Func_In1<TS_SURLHandler02ForPlainText> txt) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainText.of(hs, rq, rs, noCache, pw);
@@ -94,7 +94,7 @@ public class TS_SURLHandler01WCachePolicy {
         }
     }
 
-    public void css(TGS_CallableType1_Run<TS_SURLHandler02ForPlainCss> css) {
+    public void css(TGS_Func_In1<TS_SURLHandler02ForPlainCss> css) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainCss.of(hs, rq, rs, noCache, pw);
@@ -105,7 +105,7 @@ public class TS_SURLHandler01WCachePolicy {
         }
     }
 
-    public void html(TGS_CallableType1_Run<TS_SURLHandler02ForPlainHtml> html) {
+    public void html(TGS_Func_In1<TS_SURLHandler02ForPlainHtml> html) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainHtml.of(hs, rq, rs, noCache, pw);
@@ -116,7 +116,7 @@ public class TS_SURLHandler01WCachePolicy {
         }
     }
 
-    public void js(TGS_CallableType1_Run<TS_SURLHandler02ForPlainJs> js) {
+    public void js(TGS_Func_In1<TS_SURLHandler02ForPlainJs> js) {
         try {
             try (var pw = rs.getWriter()) {
                 var handler = TS_SURLHandler02ForPlainJs.of(hs, rq, rs, noCache, pw);

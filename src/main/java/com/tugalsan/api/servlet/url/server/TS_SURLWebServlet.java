@@ -1,6 +1,6 @@
 package com.tugalsan.api.servlet.url.server;
 
-import com.tugalsan.api.callable.client.TGS_CallableType1_Coronator;
+import com.tugalsan.api.function.client.TGS_FuncEffectivelyFinal;
 import java.util.*;
 import javax.servlet.http.*;
 import com.tugalsan.api.log.server.*;
@@ -33,7 +33,7 @@ public class TS_SURLWebServlet extends HttpServlet {
 
     public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
         TGS_UnSafe.run(() -> {
-            var servletName = TGS_CallableType1_Coronator.ofStr().coronateAs(val -> {
+            var servletName = TGS_FuncEffectivelyFinal.ofStr().coronateAs(val -> {
                 var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
                 if (TGS_StringUtils.cmn().isNullOrEmpty(tmp)) {
                     tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);

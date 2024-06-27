@@ -4,7 +4,7 @@ module com.tugalsan.api.servlet.url {
     requires com.tugalsan.api.url;
     requires com.tugalsan.api.union;
     
-    requires com.tugalsan.api.callable;
+    requires com.tugalsan.api.function;
     requires com.tugalsan.api.unsafe;
     
     requires com.tugalsan.api.file.common;

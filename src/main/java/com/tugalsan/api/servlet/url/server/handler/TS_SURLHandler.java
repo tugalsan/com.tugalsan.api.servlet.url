@@ -1,8 +1,8 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
 //AutoClosable Version of Helper
-import com.tugalsan.api.callable.client.TGS_CallableType1;
-import com.tugalsan.api.callable.client.TGS_CallableType1_Run;
+import com.tugalsan.api.function.client.TGS_Func_OutTyped_In1;
+import com.tugalsan.api.function.client.TGS_Func_In1;
 
 import java.awt.image.RenderedImage;
 import java.nio.file.Path;
@@ -32,27 +32,27 @@ public class TS_SURLHandler {
         return TS_SURLHandler01WCachePolicy.of(hs, rq, rs, false);
     }
 
-    public void download(TGS_CallableType1<Path, TS_SURLHandler02ForFileDownload> download) {
+    public void download(TGS_Func_OutTyped_In1<Path, TS_SURLHandler02ForFileDownload> download) {
         permitNoCache().download(download);
     }
     
-    public void img(String formatName, TGS_CallableType1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
+    public void img(String formatName, TGS_Func_OutTyped_In1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
         permitNoCache().img(formatName, img);
     }
     
-    public void txt(TGS_CallableType1_Run<TS_SURLHandler02ForPlainText> txt) {
+    public void txt(TGS_Func_In1<TS_SURLHandler02ForPlainText> txt) {
         permitNoCache().txt(txt);
     }
     
-    public void css(TGS_CallableType1_Run<TS_SURLHandler02ForPlainCss> css) {
+    public void css(TGS_Func_In1<TS_SURLHandler02ForPlainCss> css) {
         permitNoCache().css(css);
     }
     
-    public void html(TGS_CallableType1_Run<TS_SURLHandler02ForPlainHtml> html) {
+    public void html(TGS_Func_In1<TS_SURLHandler02ForPlainHtml> html) {
         permitNoCache().html(html);
     }
     
-    public void js(TGS_CallableType1_Run<TS_SURLHandler02ForPlainJs> js) {
+    public void js(TGS_Func_In1<TS_SURLHandler02ForPlainJs> js) {
         permitNoCache().js(js);
     }
 }
