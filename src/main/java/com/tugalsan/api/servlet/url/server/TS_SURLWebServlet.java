@@ -54,12 +54,12 @@ public class TS_SURLWebServlet extends HttpServlet {
                         }, e -> d.ct("call.await", e));
                     });
                     if (await.timeout()) {
-                        var errMsg = "ERROR(AWAIT) timeout";
+                        var errMsg = "ERROR(AWAIT) timeout " + servletPack.value1.timeout().toSeconds();
                         d.ce("call", servletName, errMsg);
                         return;
                     }
                     if (await.hasError()) {
-                        d.ce("call", servletName, "ERROR(AWAIT)", await.exceptionIfFailed.get().getMessage());
+                        d.ce("call", servletName, "ERROR(AWAIT)", servletPack.value1.timeout().toSeconds(), await.exceptionIfFailed.get().getMessage());
                         return;
                     }
                 } else {
