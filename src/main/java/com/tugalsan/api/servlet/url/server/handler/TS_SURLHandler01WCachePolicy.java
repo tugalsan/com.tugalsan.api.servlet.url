@@ -62,15 +62,19 @@ public class TS_SURLHandler01WCachePolicy {
             TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
         }, e_download -> {
             TGS_UnSafe.run(() -> {
-                d.ct("download", e_download);
+                d.ce("download", "filePath", filePathHolder.value0);
+                if (DOWNLOAD_HIDE_ERROR_DETAILS) {
+                    d.ce("download", "e_download", e_download.getMessage());
+                } else {
+                    d.ct("download", e_download);
+                }
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
             }, e_sendError -> {
-                d.ce("download", "info", "filePath", filePathHolder.value0);
-                d.ce("download", "info", "e_download", e_download.getMessage());
-                d.ce("download", "info", "e_sendError", e_sendError.getMessage());
+                d.ce("download", "e_sendError", e_sendError.getMessage());
             });
         });
     }
+    public static boolean DOWNLOAD_HIDE_ERROR_DETAILS = true;
 
     //see TS_FileImageUtils.formatNames. Example "png"
     public void img(String formatName, TGS_Func_OutTyped_In1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
