@@ -75,6 +75,7 @@ public class TS_SURLHandler01WCachePolicy {
                 } else {
                     d.ce("download", "e_sendError", e_sendError.getMessage());
                 }
+                d.ce("download", "e_sendError", "try reading this", "https://tomcat.apache.org/tomcat-11.0-doc/config/http2.html");
             });
         });
     }
