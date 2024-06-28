@@ -70,7 +70,11 @@ public class TS_SURLHandler01WCachePolicy {
                 }
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
             }, e_sendError -> {
-                d.ce("download", "e_sendError", e_sendError.getMessage());
+                if (DOWNLOAD_HIDE_ERROR_DETAILS && e_sendError.getMessage().contains("Cannot call sendError() after the response has been committed")) {
+                    //DO NOTHING
+                } else {
+                    d.ce("download", "e_sendError", e_sendError.getMessage());
+                }
             });
         });
     }
