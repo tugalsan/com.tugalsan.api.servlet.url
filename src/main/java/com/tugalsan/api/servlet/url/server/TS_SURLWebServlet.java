@@ -72,7 +72,7 @@ public class TS_SURLWebServlet extends HttpServlet {
             }
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
                 TS_SURLHandler.of(servlet, rq, rs).txt(text -> text.pw.close());
-                TS_SURLExecutorList.SYNC.forEach(item -> {
+                TS_SURLExecutorList.SYNC.forEach(false, item -> {
                     d.ce("call", "-", item.value0);
                 });
                 TGS_UnSafe.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
