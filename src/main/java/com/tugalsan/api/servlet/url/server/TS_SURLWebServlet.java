@@ -48,11 +48,13 @@ public class TS_SURLWebServlet extends HttpServlet {
             if (servletPack != null) {
                 var handler = TS_SURLHandler.of(servlet, rq, rs);
                 if (config.enableTimeout) {
-                    var await = TS_ThreadAsyncAwait.runUntil(killTrigger, servletPack.value1.timeout(), exe -> {
+                    var callableKillTrigger = killTrigger.ofParent(killTrigger);
+                    var await = TS_ThreadAsyncAwait.runUntil(callableKillTrigger, servletPack.value1.timeout(), exe -> {
                         TGS_UnSafe.run(() -> {
                             servletPack.value1.run(handler);
                         }, e -> d.ct("call.await", e));
                     });
+                    callableKillTrigger.trigger();
                     if (await.timeout()) {
                         var errMsg = "ERROR(AWAIT) timeout " + servletPack.value1.timeout().toSeconds();
                         d.ce("call", servletName, errMsg);
