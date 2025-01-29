@@ -49,24 +49,24 @@ public class TS_SURLWebServlet extends HttpServlet {
                 var handler = TS_SURLHandler.of(servlet, rq, rs);
                 if (config.enableTimeout) {
                     var servletKillTrigger = TS_ThreadSyncTrigger.ofParent(killTrigger);
-                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger, servletPack.value1.timeout(), exe -> {
+                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger, servletPack.exe().timeout(), exe -> {
                         TGS_UnSafe.run(() -> {
-                            servletPack.value1.run(servletKillTrigger, handler);
+                            servletPack.exe().run(servletKillTrigger, handler);
                         }, e -> d.ct("call.await", e));
                     });
                     servletKillTrigger.trigger();
                     if (await.timeout()) {
-                        var errMsg = "ERROR(AWAIT) timeout " + servletPack.value1.timeout().toSeconds();
+                        var errMsg = "ERROR(AWAIT) timeout " + servletPack.exe().timeout().toSeconds();
                         d.ce("call", servletName, errMsg);
                         return;
                     }
                     if (await.hasError()) {
-                        d.ce("call", servletName, "ERROR(AWAIT)", servletPack.value1.timeout().toSeconds(), await.exceptionIfFailed.get().getMessage());
+                        d.ce("call", servletName, "ERROR(AWAIT)", servletPack.exe().timeout().toSeconds(), await.exceptionIfFailed.get().getMessage());
                         return;
                     }
                 } else {
                     TGS_UnSafe.run(() -> {
-                        servletPack.value1.run(killTrigger, handler);
+                        servletPack.exe().run(killTrigger, handler);
                     }, e -> d.ct("call", e));
                 }
                 d.ci("call", "executed", "config.enableTimeout", config.enableTimeout, servletName);
@@ -75,7 +75,7 @@ public class TS_SURLWebServlet extends HttpServlet {
             if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
                 TS_SURLHandler.of(servlet, rq, rs).txt(text -> text.pw.close());
                 TS_SURLExecutorList.SYNC.forEach(false, item -> {
-                    d.ce("call", "-", item.value0);
+                    d.ce("call", "-", item.exe());
                 });
                 TGS_UnSafe.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
             }

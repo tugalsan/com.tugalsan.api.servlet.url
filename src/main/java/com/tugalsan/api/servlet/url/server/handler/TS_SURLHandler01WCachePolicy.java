@@ -5,7 +5,6 @@ import com.tugalsan.api.function.client.TGS_Func_In1;
 import com.tugalsan.api.log.server.TS_Log;
 
 import com.tugalsan.api.stream.server.TS_StreamUtils;
-import com.tugalsan.api.tuple.client.TGS_Tuple1;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
@@ -38,11 +37,13 @@ public class TS_SURLHandler01WCachePolicy {
     }
 
     public void download(TGS_Func_OutTyped_In1<Path, TS_SURLHandler02ForFileDownload> download) {
-        TGS_Tuple1<Path> filePathHolder = TGS_Tuple1.of();
+        var filePathHolder = new Object() {
+            Path filePath = null;
+        };
         TGS_UnSafe.run(() -> {
             var handler = TS_SURLHandler02ForFileDownload.of(hs, rq, rs, noCache);
-            filePathHolder.value0 = download.call(handler);
-            var filePath = filePathHolder.value0;
+            filePathHolder.filePath = download.call(handler);
+            var filePath = filePathHolder.filePath;
             if (filePath == null) {
                 d.ce("download", "filePath == null");
                 rs.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -62,7 +63,7 @@ public class TS_SURLHandler01WCachePolicy {
             TS_StreamUtils.transfer(Files.newInputStream(filePath), rs.getOutputStream());
         }, e_download -> {
             TGS_UnSafe.run(() -> {
-                d.ce("download", "filePath", filePathHolder.value0);
+                d.ce("download", "filePath", filePathHolder.filePath);
                 if (DOWNLOAD_HIDE_ERROR_DETAILS) {
                     d.ce("download", "e_download", e_download.getMessage());
                 } else {
