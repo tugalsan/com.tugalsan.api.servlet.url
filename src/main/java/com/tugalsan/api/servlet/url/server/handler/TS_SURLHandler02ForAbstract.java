@@ -1,12 +1,13 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
+import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
 import com.tugalsan.api.string.client.TGS_StringUtils;
 import com.tugalsan.api.time.client.TGS_Time;
 import com.tugalsan.api.union.client.TGS_UnionExcuse;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCEUtils;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlQueryUtils;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
@@ -83,7 +84,7 @@ public class TS_SURLHandler02ForAbstract {
 
     @Deprecated
     public Boolean getParameterBoolean(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var paramValue = getParameter(paramName, new String[]{"true", "false"});
             if (paramValue == null) {
                 return null;
@@ -91,7 +92,7 @@ public class TS_SURLHandler02ForAbstract {
             return Boolean.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrw(e);
+                return TGS_FuncMTUCEUtils.thrw(e);
             }
             return null;
         });
@@ -99,7 +100,7 @@ public class TS_SURLHandler02ForAbstract {
 
     @Deprecated
     public Integer getParameterInteger(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var paramValue = getParameter(paramName, assure);
             if (paramValue == null) {
                 return null;
@@ -107,7 +108,7 @@ public class TS_SURLHandler02ForAbstract {
             return Integer.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrw(e);
+                return TGS_FuncMTUCEUtils.thrw(e);
             }
             return null;
         });
@@ -115,7 +116,7 @@ public class TS_SURLHandler02ForAbstract {
 
     @Deprecated
     public Long getParameterLong(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var paramValue = getParameter(paramName, assure);
             if (paramValue == null) {
                 return null;
@@ -123,7 +124,7 @@ public class TS_SURLHandler02ForAbstract {
             return Long.valueOf(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrw(e);
+                return TGS_FuncMTUCEUtils.thrw(e);
             }
             return null;
         });
@@ -131,7 +132,7 @@ public class TS_SURLHandler02ForAbstract {
 
     @Deprecated
     public TGS_Time getParameterDate(CharSequence paramName, boolean assure) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var paramValue = getParameterLong(paramName, assure);
             if (paramValue == null) {
                 return null;
@@ -139,7 +140,7 @@ public class TS_SURLHandler02ForAbstract {
             return TGS_Time.ofDate(paramValue);
         }, e -> {
             if (assure) {
-                return TGS_UnSafe.thrw(e);
+                return TGS_FuncMTUCEUtils.thrw(e);
             }
             return null;
         });
@@ -147,14 +148,14 @@ public class TS_SURLHandler02ForAbstract {
 
     //ERROR-HANDLER---------------------------------------------------------------
     final public void throwError(String text) {
-        TGS_UnSafe.thrw(d.className, "throwError(String text)", text);
+        TGS_FuncMTUCEUtils.thrw(d.className, "throwError(String text)", text);
     }
 
     final public void throwError(Throwable t) {
-        TGS_UnSafe.thrw(t);
+        TGS_FuncMTUCEUtils.thrw(t);
     }
 
     final public void throwError(CharSequence className, CharSequence funcName, Object errorContent) {
-        TGS_UnSafe.thrw(className, funcName, errorContent);
+        TGS_FuncMTUCEUtils.thrw(className, funcName, errorContent);
     }
 }

@@ -5,7 +5,7 @@ import com.tugalsan.api.file.html.client.TGS_FileHtmlText;
 import com.tugalsan.api.file.html.client.TGS_FileHtmlUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.string.client.TGS_StringUtils;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
 import com.tugalsan.api.url.client.TGS_Url;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +21,7 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
 
     private TS_SURLHandler02ForPlainHtml(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
         super(hs, rq, rs, noCache, pw);
-        TGS_UnSafe.run(() -> {
+        TGS_FuncMTCEUtils.run(() -> {
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setContentType("text/html; charset=" + StandardCharsets.UTF_8.name());
