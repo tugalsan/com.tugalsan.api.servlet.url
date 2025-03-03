@@ -75,7 +75,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 d.ci("call", "executed", "config.enableTimeout", config.enableTimeout, servletName);
                 return;
             }
-            if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().filter(sn -> Objects.equals(sn, servletName)).findAny().isPresent()) {
+            if (SKIP_ERRORS_FOR_SERVLETNAMES.stream().anyMatch(sn -> Objects.equals(sn, servletName))) {
                 TS_SURLHandler.of(servlet, rq, rs).txt(text -> text.pw.close());
                 TS_SURLExecutorList.SYNC.forEach(false, item -> {
                     d.ce("call", "-", item.exe());
