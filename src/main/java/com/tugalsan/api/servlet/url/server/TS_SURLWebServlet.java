@@ -56,8 +56,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                             servletPack.exe().run(servletKillTrigger, handler);
                         }, e -> d.ct("call.await", e));
                     });
-                    d.cr("call", "servletKillTrigger.trigger();");
-                    servletKillTrigger.trigger();
+                    servletKillTrigger.trigger("surl_post_await");
                     if (await.timeout()) {
                         var errMsg = "ERROR(AWAIT) timeout " + servletPack.exe().timeout().toSeconds();
                         d.ce("call", servletName, errMsg);
