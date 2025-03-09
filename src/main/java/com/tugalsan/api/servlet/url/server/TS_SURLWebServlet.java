@@ -50,8 +50,8 @@ public class TS_SURLWebServlet extends HttpServlet {
             if (servletPack != null) {
                 var handler = TS_SURLHandler.of(servlet, rq, rs);
                 if (config.enableTimeout) {
-                    var servletKillTrigger = TS_ThreadSyncTrigger.ofParent(killTrigger, d.className + "." + servletName);
-                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger, servletPack.exe().timeout(), exe -> {
+                    var servletKillTrigger = TS_ThreadSyncTrigger.of(servletName, killTrigger);
+                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger.newChild(d.className), servletPack.exe().timeout(), exe -> {
                         TGS_FuncMTCEUtils.run(() -> {
                             servletPack.exe().run(servletKillTrigger, handler);
                         }, e -> d.ct("call.await", e));
