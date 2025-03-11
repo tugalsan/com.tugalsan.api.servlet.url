@@ -49,14 +49,19 @@ public class TS_SURLWebServlet extends HttpServlet {
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
                 var handler = TS_SURLHandler.of(servlet, rq, rs);
-                var servletKillTrigger = TS_ThreadSyncTrigger.of(servletName, killTrigger);
+                var servletKillTrigger_wt = TS_ThreadSyncTrigger.of(servletName, killTrigger).newChild(d.className);
                 if (config.enableTimeout) {
-                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger.newChild(d.className).newChild("config.enableTimeout"), servletPack.exe().timeout(), exe -> {
+                    var servletKillTrigger_await_wt = servletKillTrigger_wt.newChild("await");
+                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger_await_wt, servletPack.exe().timeout(), exe -> {
                         TGS_FuncMTCEUtils.run(() -> {
-                            servletPack.exe().run(servletKillTrigger, handler);
-                        }, e -> d.ct("call.await", e));
+                            servletPack.exe().run(servletKillTrigger_await_wt, handler);
+                            servletKillTrigger_await_wt.trigger("surl_run_await.ok");
+                        }, e -> {
+                            servletKillTrigger_await_wt.trigger("surl_run_await.failed");
+                            d.ct("call.await", e);
+                        });
                     });
-                    servletKillTrigger.trigger("surl_post_await");
+                    servletKillTrigger_await_wt.trigger("surl_post_await");
                     if (await.timeout()) {
                         var errMsg = "ERROR(AWAIT) timeout " + servletPack.exe().timeout().toSeconds();
                         d.ce("call", servletName, errMsg);
@@ -68,10 +73,14 @@ public class TS_SURLWebServlet extends HttpServlet {
                         return;
                     }
                 } else {
+                    var servletKillTrigger_run_wt = servletKillTrigger_wt.newChild("run");
                     TGS_FuncMTCEUtils.run(() -> {
-                        servletPack.exe().run(servletKillTrigger.newChild(d.className).newChild("!config.enableTimeout"), handler);
-                    }, e -> d.ct("call", e));
-                    servletKillTrigger.trigger("surl_post_run");
+                        servletPack.exe().run(servletKillTrigger_run_wt, handler);
+                        servletKillTrigger_run_wt.trigger("surl_post_run.ok");
+                    }, e -> {
+                        servletKillTrigger_run_wt.trigger("surl_post_run.failed");
+                        d.ct("call", e);
+                    });
                 }
                 d.ci("call", "executed", "config.enableTimeout", config.enableTimeout, servletName);
                 return;
