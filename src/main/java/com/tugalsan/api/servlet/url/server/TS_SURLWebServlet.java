@@ -49,9 +49,9 @@ public class TS_SURLWebServlet extends HttpServlet {
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
                 var handler = TS_SURLHandler.of(servlet, rq, rs);
+                var servletKillTrigger = TS_ThreadSyncTrigger.of(servletName, killTrigger);
                 if (config.enableTimeout) {
-                    var servletKillTrigger = TS_ThreadSyncTrigger.of(servletName, killTrigger);
-                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger.newChild(d.className), servletPack.exe().timeout(), exe -> {
+                    var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger.newChild(d.className).newChild("config.enableTimeout"), servletPack.exe().timeout(), exe -> {
                         TGS_FuncMTCEUtils.run(() -> {
                             servletPack.exe().run(servletKillTrigger, handler);
                         }, e -> d.ct("call.await", e));
@@ -69,8 +69,9 @@ public class TS_SURLWebServlet extends HttpServlet {
                     }
                 } else {
                     TGS_FuncMTCEUtils.run(() -> {
-                        servletPack.exe().run(killTrigger, handler);
+                        servletPack.exe().run(servletKillTrigger.newChild(d.className).newChild("!config.enableTimeout"), handler);
                     }, e -> d.ct("call", e));
+                    servletKillTrigger.trigger("surl_post_run");
                 }
                 d.ci("call", "executed", "config.enableTimeout", config.enableTimeout, servletName);
                 return;
