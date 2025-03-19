@@ -20,8 +20,12 @@ import javax.servlet.annotation.WebServlet;
 public class TS_SURLWebServlet extends HttpServlet {
 
     final private static TS_Log d = TS_Log.of(false, TS_SURLWebServlet.class);
-    public static volatile TS_ThreadSyncTrigger killTrigger = null;
+    private static volatile TS_ThreadSyncTrigger killTrigger = null;
     public static volatile TS_SURLConfig config = TS_SURLConfig.of();
+
+    public static void warmUp(TS_ThreadSyncTrigger killTrigger) {
+        TS_SURLWebServlet.killTrigger = killTrigger;
+    }
 
     @Override
     public void doGet(HttpServletRequest rq, HttpServletResponse rs) {
