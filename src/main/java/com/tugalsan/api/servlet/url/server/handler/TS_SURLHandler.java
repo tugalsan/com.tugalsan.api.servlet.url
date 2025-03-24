@@ -1,8 +1,8 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
 //AutoClosable Version of Helper
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutTyped_In1;
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In1;
 
 import java.awt.image.RenderedImage;
 import java.nio.file.Path;
@@ -32,27 +32,27 @@ public class TS_SURLHandler {
         return TS_SURLHandler01WCachePolicy.of(hs, rq, rs, false);
     }
 
-    public void download(TGS_FuncMTUCE_OutTyped_In1<Path, TS_SURLHandler02ForFileDownload> download) {
+    public void download(TGS_FuncMTU_OutTyped_In1<Path, TS_SURLHandler02ForFileDownload> download) {
         permitNoCache().download(download);
     }
     
-    public void img(String formatName, TGS_FuncMTUCE_OutTyped_In1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
+    public void img(String formatName, TGS_FuncMTU_OutTyped_In1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
         permitNoCache().img(formatName, img);
     }
     
-    public void txt(TGS_FuncMTUCE_In1<TS_SURLHandler02ForPlainText> txt) {
+    public void txt(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainText> txt) {
         permitNoCache().txt(txt);
     }
     
-    public void css(TGS_FuncMTUCE_In1<TS_SURLHandler02ForPlainCss> css) {
+    public void css(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainCss> css) {
         permitNoCache().css(css);
     }
     
-    public void html(TGS_FuncMTUCE_In1<TS_SURLHandler02ForPlainHtml> html) {
+    public void html(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainHtml> html) {
         permitNoCache().html(html);
     }
     
-    public void js(TGS_FuncMTUCE_In1<TS_SURLHandler02ForPlainJs> js) {
+    public void js(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainJs> js) {
         permitNoCache().js(js);
     }
 }

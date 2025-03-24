@@ -1,6 +1,6 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +13,7 @@ public class TS_SURLHandler02ForPlainJs extends TS_SURLHandler02ForPlainAbstract
 
     private TS_SURLHandler02ForPlainJs(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
         super(hs, rq, rs, noCache, pw);
-        TGS_FuncMTCEUtils.run(() -> {
+        TGS_FuncMTCUtils.run(() -> {
             rq.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setCharacterEncoding(StandardCharsets.UTF_8.name());
             rs.setContentType("text/javascript; charset=" + StandardCharsets.UTF_8.name());

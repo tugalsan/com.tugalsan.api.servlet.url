@@ -1,7 +1,7 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
 import com.tugalsan.api.log.server.TS_Log;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,7 @@ public class TS_SURLHandler02ForFileDownload extends TS_SURLHandler02ForAbstract
     }
 
     public static void throwFileNotFound(HttpServletResponse rs, CharSequence msg) {
-        TGS_FuncMTCEUtils.run(() -> {
+        TGS_FuncMTCUtils.run(() -> {
             d.ce("throwFileNotFound", msg);
             rs.sendError(HttpServletResponse.SC_NOT_FOUND);
         }, e -> d.ct("throwFileNotFound", e));

@@ -1,8 +1,8 @@
 package com.tugalsan.api.servlet.url.server;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCEEffectivelyFinal;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUEffectivelyFinal;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUUtils;
 import java.util.*;
 import javax.servlet.http.*;
 import com.tugalsan.api.log.server.*;
@@ -38,14 +38,14 @@ public class TS_SURLWebServlet extends HttpServlet {
     }
 
     public static void call(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        TGS_FuncMTCEUtils.run(() -> {
-            var servletName = TGS_FuncMTUCEEffectivelyFinal.ofStr().coronateAs(val -> {
+        TGS_FuncMTCUtils.run(() -> {
+            var servletName = TGS_FuncMTUEffectivelyFinal.ofStr().coronateAs(val -> {
                 var tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME(), true);
                 if (TGS_StringUtils.cmn().isNullOrEmpty(tmp)) {
                     tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
                 }
                 if (TGS_StringUtils.cmn().isNullOrEmpty(tmp)) {
-                    TGS_FuncMTUCEUtils.thrw(d.className, "call", "servletName is empty");
+                    TGS_FuncMTUUtils.thrw(d.className, "call", "servletName is empty");
                     return null;
                 }
                 return tmp;
@@ -57,7 +57,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 if (config.enableTimeout) {
                     var servletKillTrigger_await_wt = servletKillTrigger_wt.newChild("await");
                     var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger_await_wt, servletPack.exe().timeout(), exe -> {
-                        TGS_FuncMTCEUtils.run(() -> {
+                        TGS_FuncMTCUtils.run(() -> {
                             servletPack.exe().run(servletKillTrigger_await_wt, handler);
                             servletKillTrigger_await_wt.trigger("surl_run_await.ok");
                         }, e -> {
@@ -78,7 +78,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                     }
                 } else {
                     var servletKillTrigger_run_wt = servletKillTrigger_wt.newChild("run");
-                    TGS_FuncMTCEUtils.run(() -> {
+                    TGS_FuncMTCUtils.run(() -> {
                         servletPack.exe().run(servletKillTrigger_run_wt, handler);
                         servletKillTrigger_run_wt.trigger("surl_post_run.ok");
                     }, e -> {
@@ -94,7 +94,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 TS_SURLExecutorList.SYNC.forEach(false, item -> {
                     d.ce("call", "-", item.exe());
                 });
-                TGS_FuncMTUCEUtils.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
+                TGS_FuncMTUUtils.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
             }
         }, e -> d.ct("call", e));
     }
