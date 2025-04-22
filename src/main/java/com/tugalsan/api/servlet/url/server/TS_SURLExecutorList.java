@@ -5,6 +5,10 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 
 public class TS_SURLExecutorList {
+    
+    private TS_SURLExecutorList(){
+        
+    }
 
     final private static TS_Log d = TS_Log.of(TS_SURLExecutorList.class);
 
