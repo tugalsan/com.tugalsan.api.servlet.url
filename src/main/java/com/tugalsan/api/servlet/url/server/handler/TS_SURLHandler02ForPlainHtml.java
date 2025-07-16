@@ -96,6 +96,21 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
         println("}");
         println("</script>");
     }
+    
+    public void addHTML_Validator(CharSequence formName, CharSequence funcName,
+            CharSequence[] varNames, CharSequence[] varLables, CharSequence errorNull, CharSequence errorMax, int[] maxChar) {
+        println("<script>");
+        println("function " + funcName + "() {");
+        IntStream.range(0, varNames.length).forEachOrdered(i -> {
+            var sb = new StringBuilder();
+            sb.append("var p=document.forms[\"").append(formName).append("\"][\"").append(varNames[i]).append("\"].value;");
+            sb.append("if (p==null || p==\"\") {alert(\"").append(errorNull).append(" -> (").append(varLables[i]).append(")\"); return false;}");
+            sb.append("if (p.length > ").append(maxChar[i]).append(") {alert(\"").append(errorMax).append(" -> (").append(varLables[i]).append(".maxChar: + ").append(maxChar[i]).append(")\"); return false;}");
+            println(sb.toString());
+        });
+        println("}");
+        println("</script>");
+    }
 
     public void addHTML_LinkBR(CharSequence text, TGS_Url url) {
         var html = TGS_StringUtils.cmn().concat("<a href=\"", url.toString(), "\">", text.toString(), "</a><br/>");
