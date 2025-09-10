@@ -148,7 +148,7 @@ public class TS_SURLHandler02ForAbstract {
 
     //ERROR-HANDLER---------------------------------------------------------------
     final public void throwError(String text) {
-        TGS_FuncMTUUtils.thrw(d.className, "throwError(String text)", text);
+        TGS_FuncMTUUtils.thrw(d.className(), "throwError(String text)", text);
     }
 
     final public void throwError(Throwable t) {

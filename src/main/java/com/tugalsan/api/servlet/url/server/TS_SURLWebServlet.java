@@ -45,7 +45,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                     tmp = TS_UrlServletRequestUtils.getParameterValue(rq, TGS_SURLUtils.PARAM_SERVLET_NAME_ALIAS0(), true);
                 }
                 if (TGS_StringUtils.cmn().isNullOrEmpty(tmp)) {
-                    TGS_FuncMTUUtils.thrw(d.className, "call", "servletName is empty");
+                    TGS_FuncMTUUtils.thrw(d.className(), "call", "servletName is empty");
                     return null;
                 }
                 return tmp;
@@ -53,7 +53,7 @@ public class TS_SURLWebServlet extends HttpServlet {
             var servletPack = TS_SURLExecutorList.get(servletName);
             if (servletPack != null) {
                 var handler = TS_SURLHandler.of(servlet, rq, rs);
-                var servletKillTrigger_wt = TS_ThreadSyncTrigger.of(servletName, killTrigger).newChild(d.className);
+                var servletKillTrigger_wt = TS_ThreadSyncTrigger.of(servletName, killTrigger).newChild(d.className());
                 if (config.enableTimeout) {
                     var servletKillTrigger_await_wt = servletKillTrigger_wt.newChild("await");
                     var await = TS_ThreadAsyncAwait.runUntil(servletKillTrigger_await_wt, servletPack.exe().timeout(), exe -> {
@@ -94,7 +94,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                 TS_SURLExecutorList.SYNC.forEach(false, item -> {
                     d.ce("call", "-", item.exe());
                 });
-                TGS_FuncMTUUtils.thrw(d.className, "call", "servletName not identified: [" + servletName + "]");
+                TGS_FuncMTUUtils.thrw(d.className(), "call", "servletName not identified: [" + servletName + "]");
             }
         }, e -> d.ct("call", e));
     }
