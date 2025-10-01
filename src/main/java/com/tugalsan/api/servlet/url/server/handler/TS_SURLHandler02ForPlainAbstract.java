@@ -1,12 +1,9 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.log.server.TS_Log;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import module com.tugalsan.api.log;
+import module javax.servlet.api;
+import java.io.*;
+import java.util.*;
 
 abstract public class TS_SURLHandler02ForPlainAbstract extends TS_SURLHandler02ForAbstract {
 

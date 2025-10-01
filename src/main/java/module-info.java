@@ -3,8 +3,7 @@ module com.tugalsan.api.servlet.url {
     requires java.desktop;
     requires com.tugalsan.api.url;
     requires com.tugalsan.api.union;
-    requires com.tugalsan.api.function;
-    
+    requires com.tugalsan.api.function;    
     requires com.tugalsan.api.file.common;
     requires com.tugalsan.api.file.txt;
     requires com.tugalsan.api.file.json;

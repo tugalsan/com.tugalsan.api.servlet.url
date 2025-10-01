@@ -1,12 +1,10 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
 //AutoClosable Version of Helper
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In1;
-
+import module com.tugalsan.api.function;
 import module java.desktop;
-import java.nio.file.Path;
-import javax.servlet.http.*;
+import module javax.servlet.api;
+import java.nio.file.*;
 
 public class TS_SURLHandler {
 
@@ -35,23 +33,23 @@ public class TS_SURLHandler {
     public void download(TGS_FuncMTU_OutTyped_In1<Path, TS_SURLHandler02ForFileDownload> download) {
         permitNoCache().download(download);
     }
-    
+
     public void img(String formatName, TGS_FuncMTU_OutTyped_In1<RenderedImage, TS_SURLHandler02ForFileImg> img) {
         permitNoCache().img(formatName, img);
     }
-    
+
     public void txt(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainText> txt) {
         permitNoCache().txt(txt);
     }
-    
+
     public void css(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainCss> css) {
         permitNoCache().css(css);
     }
-    
+
     public void html(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainHtml> html) {
         permitNoCache().html(html);
     }
-    
+
     public void js(TGS_FuncMTU_In1<TS_SURLHandler02ForPlainJs> js) {
         permitNoCache().js(js);
     }

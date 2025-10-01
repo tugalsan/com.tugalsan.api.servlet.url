@@ -1,10 +1,8 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.log.server.TS_Log;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.function;
+import module javax.servlet.api;
 
 public class TS_SURLHandler02ForFileDownload extends TS_SURLHandler02ForAbstract {
 

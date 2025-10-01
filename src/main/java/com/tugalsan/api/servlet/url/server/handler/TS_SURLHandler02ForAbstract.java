@@ -1,22 +1,15 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.log.server.TS_Log;
-import com.tugalsan.api.network.server.TS_NetworkIPUtils;
-import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
-import com.tugalsan.api.string.client.TGS_StringUtils;
-import com.tugalsan.api.time.client.TGS_Time;
-import com.tugalsan.api.union.client.TGS_UnionExcuse;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUUtils;
-import com.tugalsan.api.url.client.TGS_Url;
-import com.tugalsan.api.url.client.TGS_UrlQueryUtils;
-import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
-import com.tugalsan.api.url.server.TS_UrlUtils;
-import java.util.Arrays;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.network;
+import module com.tugalsan.api.servlet.url;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.time;
+import module com.tugalsan.api.union;
+import module com.tugalsan.api.url;
+import module javax.servlet.api;
+import java.util.*;
 
 public class TS_SURLHandler02ForAbstract {
 

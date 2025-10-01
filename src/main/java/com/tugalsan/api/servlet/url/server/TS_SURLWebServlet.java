@@ -1,20 +1,14 @@
 package com.tugalsan.api.servlet.url.server;
 
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUEffectivelyFinal;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUUtils;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.servlet.url;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.thread;
+import module com.tugalsan.api.url;
+import module javax.servlet.api;
 import java.util.*;
-import javax.servlet.http.*;
-import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.servlet.url.client.*;
-import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
-import com.tugalsan.api.string.client.*;
-import com.tugalsan.api.thread.server.async.await.TS_ThreadAsyncAwait;
-import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-
-import com.tugalsan.api.url.server.*;
-import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/" + TGS_SURLUtils.LOC_NAME)//AS IN "/u"
 public class TS_SURLWebServlet extends HttpServlet {

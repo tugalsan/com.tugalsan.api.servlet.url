@@ -1,16 +1,13 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import module com.tugalsan.api.function;
+import module javax.servlet.api;
+import java.io.*;
+import java.nio.charset.*;
 
 public class TS_SURLHandler02ForPlainCss extends TS_SURLHandler02ForPlainAbstract {
 
 //    final private static TS_Log d = TS_Log.of(TS_SURLHandler02ForPlainCss.class);
-
     private TS_SURLHandler02ForPlainCss(HttpServlet hs, HttpServletRequest rq, HttpServletResponse rs, boolean noCache, PrintWriter pw) {
         super(hs, rq, rs, noCache, pw);
         TGS_FuncMTCUtils.run(() -> {

@@ -1,10 +1,9 @@
 package com.tugalsan.api.servlet.url.server;
 
-
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In2;
-import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
-import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-import java.time.Duration;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.servlet.url;
+import module com.tugalsan.api.thread;
+import java.time.*;
 
 abstract public class TS_SURLExecutor implements TGS_FuncMTU_In2<TS_ThreadSyncTrigger, TS_SURLHandler> {
 

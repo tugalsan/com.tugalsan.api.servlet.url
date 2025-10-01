@@ -1,19 +1,16 @@
 package com.tugalsan.api.servlet.url.server.handler;
 
-import com.tugalsan.api.file.common.client.TGS_FileCommonFavIcon;
-import com.tugalsan.api.file.html.client.TGS_FileHtmlText;
-import com.tugalsan.api.file.html.client.TGS_FileHtmlUtils;
-import com.tugalsan.api.log.server.TS_Log;
-import com.tugalsan.api.string.client.TGS_StringUtils;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.url.client.TGS_Url;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.stream.IntStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import module com.tugalsan.api.file.common;
+import module com.tugalsan.api.file.html;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.url;
+import module javax.servlet.api;
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.util.stream.*;
 
 public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstract {
 
