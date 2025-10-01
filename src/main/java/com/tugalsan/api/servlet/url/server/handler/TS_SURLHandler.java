@@ -4,7 +4,7 @@ package com.tugalsan.api.servlet.url.server.handler;
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In1;
 
-import java.awt.image.RenderedImage;
+import module java.desktop;
 import java.nio.file.Path;
 import javax.servlet.http.*;
 
