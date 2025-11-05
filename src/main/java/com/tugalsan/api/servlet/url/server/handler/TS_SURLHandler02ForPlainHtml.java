@@ -71,6 +71,10 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
         IntStream.range(0, count).forEachOrdered(i -> println("<br/>"));
     }
 
+    public void addHTML_HR() {
+        println("<hr/>");
+    }
+
     public void addHTML_ImgBR(TGS_Url source, Integer width, Integer height) {
         println("<img src=\"" + source + "\""
                 + (width == null ? "" : TGS_StringUtils.cmn().concat(" width=\"", String.valueOf(width), "\""))
@@ -93,7 +97,7 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
         println("}");
         println("</script>");
     }
-    
+
     public void addHTML_Validator(CharSequence formName, CharSequence funcName,
             CharSequence[] varNames, CharSequence[] varLables, CharSequence errorNull, CharSequence errorMax, int[] maxChar) {
         println("<script>");
