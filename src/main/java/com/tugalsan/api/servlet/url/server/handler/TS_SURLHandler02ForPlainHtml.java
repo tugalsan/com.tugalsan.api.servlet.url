@@ -71,8 +71,8 @@ public class TS_SURLHandler02ForPlainHtml extends TS_SURLHandler02ForPlainAbstra
         IntStream.range(0, count).forEachOrdered(i -> println("<br/>"));
     }
 
-    public void addHTML_HR() {
-        println("<hr/>");
+    public void addHTML_BR_HR_BR() {
+        println("<br/><hr/><br/>");
     }
 
     public void addHTML_ImgBR(TGS_Url source, Integer width, Integer height) {
