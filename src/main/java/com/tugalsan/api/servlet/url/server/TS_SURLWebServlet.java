@@ -71,6 +71,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                         return;
                     }
                 } else {
+                    d.ce("call", servletName, "WARNING: enableTimeout=false");
                     var servletKillTrigger_run_wt = servletKillTrigger_wt.newChild("run");
                     TGS_FuncMTCUtils.run(() -> {
                         servletPack.exe().run(servletKillTrigger_run_wt, handler);
