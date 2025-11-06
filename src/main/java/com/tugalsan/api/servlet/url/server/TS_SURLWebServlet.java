@@ -66,7 +66,7 @@ public class TS_SURLWebServlet extends HttpServlet {
                         return;
                     }
                     if (await.hasError()) {
-                        d.ce("call", servletName, "ERROR(AWAIT)", servletPack.exe().timeout().toSeconds(), await.exceptionIfFailed().get().getMessage());
+                        d.ce("call", servletName, "ERROR(AWAIT)", await.exceptionIfFailed().get().getMessage());
                         d.ct("call", await.exceptionIfFailed().get());
                         return;
                     }
