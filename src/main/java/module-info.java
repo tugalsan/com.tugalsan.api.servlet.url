@@ -9,6 +9,7 @@ module com.tugalsan.api.servlet.url {
     requires com.tugalsan.api.file.json;
     requires com.tugalsan.api.file;
     requires com.tugalsan.api.log;
+    requires com.tugalsan.api.os;
     requires com.tugalsan.api.stream;
     requires com.tugalsan.api.thread;
     requires com.tugalsan.api.list;
